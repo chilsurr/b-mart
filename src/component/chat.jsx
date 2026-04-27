@@ -45,19 +45,15 @@ function Chat() {
     ];
 
     return (
-        <div className="container">
-
-            {/* Header */}
+        <div className="chat-container">
             <header className="chat-header">
-                <button className="chat-back">←</button>
+                <img className="icon" src={Arrow} alt="" onClick={back} />
 
                 <div className="chat-profile">
                     <div className="chat-avatar"></div>
                     <h2 className="chat-name">B - Mart</h2>
                 </div>
             </header>
-
-            {/* Body */}
             <main className="chat-body">
                 {messages.map((msg) => (
                     <div
@@ -68,8 +64,6 @@ function Chat() {
                     </div>
                 ))}
             </main>
-
-            {/* Footer */}
             <footer className="chat-footer">
                 <button className="chat-add">＋</button>
 
