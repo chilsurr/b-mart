@@ -20,14 +20,6 @@ function Home() {
     const navigate = useNavigate()
     const { Meta } = Card;
 
-    const imgstyle = {
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        height: "240px",
-        width: "100%",
-        borderRadius: "5px"
-    }
-
     function cart() {
         navigate("cart/")
     }
@@ -81,16 +73,16 @@ function Home() {
                 <div className="carousel">
                     <Carousel autoplay>
                         <div >
-                            <div style={{ ...imgstyle, backgroundImage: `url(${img1})` }}></div>
+                            <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>
                         </div>
                         <div>
-                            <div style={{ ...imgstyle, backgroundImage: `url(${img2})` }}></div>
+                            <div className="img-carousel" style={{ backgroundImage: `url(${img2})` }}></div>
                         </div>
                         <div>
-                            <div style={{ ...imgstyle, backgroundImage: `url(${img3})` }}></div>
+                            <div className="img-carousel" style={{ backgroundImage: `url(${img3})` }}></div>
                         </div>
                         <div>
-                            <div style={{ ...imgstyle, backgroundImage: `url(${img1})` }}></div>
+                            <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>
                         </div>
                     </Carousel>
 
@@ -100,10 +92,10 @@ function Home() {
                     <div className="card-category">
                         <Card
                             hoverable
-                            style={{ width: 120, marginBottom: 15 }}
+                            style={{ width: 85,height:135, marginBottom: 15 }}
                             cover={
                                 <img
-                                    style={{ height: 120 }}
+                                    style={{ height: 85 }}
                                     draggable={false}
                                     alt="example"
                                     src={imgCat1}
@@ -115,10 +107,10 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 120, marginBottom: 15 }}
+                            style={{ width: 85, height:135, marginBottom: 15 }}
                             cover={
                                 <img
-                                    style={{ height: 120 }}
+                                    style={{ height: 85 }}
                                     draggable={false}
                                     alt="example"
                                     src={imgCat2}
@@ -130,10 +122,10 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 120, marginBottom: 15 }}
+                            style={{ width: 85, height:135, marginBottom: 15 }}
                             cover={
                                 <img
-                                    style={{ height: 120 }}
+                                    style={{ height: 85 }}
                                     draggable={false}
                                     alt="example"
                                     src={imgCat3}
@@ -145,10 +137,10 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 120, marginBottom: 15 }}
+                            style={{ width: 85, height:135, marginBottom: 15 }}
                             cover={
                                 <img
-                                    style={{ height: 120 }}
+                                    style={{ height: 85 }}
                                     draggable={false}
                                     alt="example"
                                     src={imgCat4}
@@ -160,10 +152,10 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 120, marginBottom: 15 }}
+                            style={{ width: 85, height:135, marginBottom: 15 }}
                             cover={
                                 <img
-                                    style={{ height: 120 }}
+                                    style={{ height: 85 }}
                                     draggable={false}
                                     alt="example"
                                     src={imgCat1}
@@ -175,10 +167,10 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 120, marginBottom: 15 }}
+                            style={{ width: 85, height:135, marginBottom: 15 }}
                             cover={
                                 <img
-                                    style={{ height: 120 }}
+                                    style={{ height: 85 }}
                                     draggable={false}
                                     alt="example"
                                     src={imgCat2}
@@ -190,10 +182,10 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 120, marginBottom: 15 }}
+                            style={{ width: 85, height:135, marginBottom: 15 }}
                             cover={
                                 <img
-                                    style={{ height: 120 }}
+                                    style={{ height: 85 }}
                                     draggable={false}
                                     alt="example"
                                     src={imgCat3}
@@ -205,10 +197,10 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 120, marginBottom: 15 }}
+                            style={{ width: 85, height:135, marginBottom: 15 }}
                             cover={
                                 <img
-                                    style={{ height: 120 }}
+                                    style={{ height: 85 }}
                                     draggable={false}
                                     alt="example"
                                     src={imgCat4}
@@ -227,10 +219,10 @@ function Home() {
                                 onClick={detail}
                                 key={index}
                                 hoverable
-                                style={{ width: 150, flexShrink: 0 }}
+                                style={{ width: 120, flexShrink: 0 }}
                                 cover={
                                     <img
-                                        style={{ height: 150 }}
+                                        style={{ height: 120 }}
                                         draggable={false}
                                         alt="example"
                                         src={imgCat1}
@@ -238,7 +230,7 @@ function Home() {
                                 }
                             >
                                 <div className="card-body">
-                                    <div className="title">
+                                    <div className="product-title">
                                         <span>Wall's Populaire Es Krim Cokelat Vanila</span>
                                     </div>
                                     <div className="price">Rp 5.800</div>
@@ -259,10 +251,10 @@ function Home() {
                                 onClick={detail}
                                 key={index}
                                 hoverable
-                                style={{ width: 150, flexShrink: 0 }}
+                                style={{ width: 120, flexShrink: 0 }}
                                 cover={
                                     <img
-                                        style={{ height: 150 }}
+                                        style={{ height: 120 }}
                                         draggable={false}
                                         alt="example"
                                         src={imgCat2}
@@ -270,7 +262,7 @@ function Home() {
                                 }
                             >
                                 <div className="card-body">
-                                    <div className="title">
+                                    <div className="product-title">
                                         <span>Fruit Tea Minuman Teh Freeze 350 ml</span>
                                     </div>
                                     <div className="price">Rp 5.800</div>
@@ -290,10 +282,10 @@ function Home() {
                                 onClick={detail}
                                 key={index}
                                 hoverable
-                                style={{ width: 150, flexShrink: 0 }}
+                                style={{ width: 120, flexShrink: 0 }}
                                 cover={
                                     <img
-                                        style={{ height: 150 }}
+                                        style={{ height: 120 }}
                                         draggable={false}
                                         alt="example"
                                         src={imgCat3}
@@ -301,7 +293,7 @@ function Home() {
                                 }
                             >
                                 <div className="card-body">
-                                    <div className="title">
+                                    <div className="product-title">
                                         <span>SoKlin Deterjen Cair Eau de Parfum Bleu Petale 700 g</span>
                                     </div>
                                     <div className="price">Rp 5.800</div>
@@ -320,10 +312,10 @@ function Home() {
                                 onClick={detail}
                                 key={index}
                                 hoverable
-                                style={{ width: 150, flexShrink: 0 }}
+                                style={{ width: 120, flexShrink: 0 }}
                                 cover={
                                     <img
-                                        style={{ height: 150 }}
+                                        style={{ height: 120 }}
                                         draggable={false}
                                         alt="example"
                                         src={imgCat4}
@@ -331,7 +323,7 @@ function Home() {
                                 }
                             >
                                 <div className="card-body">
-                                    <div className="title">
+                                    <div className="product-title">
                                         <span>SoKlin Deterjen Cair Eau de Parfum Bleu Petale 700 g</span>
                                     </div>
                                     <div className="price">Rp 5.800</div>

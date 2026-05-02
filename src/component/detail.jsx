@@ -17,7 +17,6 @@ export default function ProductDetail() {
 
     return (
         <div className="detail-container">
-            {/* Header */}
             <div className="detail-header">
                 <img className="icon" src={Arrow} onClick={back} />
                 <div>
@@ -42,6 +41,11 @@ export default function ProductDetail() {
                     ullam nostrum nobis! Eos corporis ullam, quibusdam perferendis eius expedita omnis inventore
                     reiciendis quidem consectetur debitis labore, doloremque recusandae consequuntur, praesentium
                     fugiat vel suscipit cupiditate eveniet nam! Dolore.
+
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum soluta dolores tenetur? Sunt veniam quidem 
+                    nam qui nobis nihil vero porro. Esse ut asperiores, libero dolorum voluptates expedita. Delectus commodi 
+                    rerum nam corporis sint iure dignissimos error incidunt vel laboriosam nobis in aperiam, 
+                    nostrum quod fugit voluptate porro accusantium. Nostrum?
                 </div>
             </div>
 

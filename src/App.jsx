@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import ScrollToTop from './scrolltop'
 import './App.css'
 
 import Regist from './regist-page'
@@ -18,6 +19,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop/>
       <Routes>
         <Route element={<Regist />}>
           <Route path='login/' element={<Login />} />
