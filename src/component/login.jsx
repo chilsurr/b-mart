@@ -6,8 +6,10 @@ function Login() {
 
   return (
     <div className="login-container">
+        <div className="regist-tittle">
+          <div >Login</div>
+        </div>
       <div className="login-card">
-
         <form className="login-form">
           <input className="input" type="email" placeholder="Enter your email" />
           <input className="input" type="password" placeholder="Enter your password" />

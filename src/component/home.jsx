@@ -35,64 +35,89 @@ function Home() {
 
 
     const [isSticky, setIsSticky] = useState(false);
+    const [opacity, setOpacity] = useState(0);
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsSticky(window.scrollY > 52); // threshold bebas (misal 80px)
+            setIsSticky(window.scrollY > 40);
+            const newOpacity = Math.min(scrollY / 50, 1);
+            console.log(newOpacity)
+            setOpacity(newOpacity);
         };
+        console.log(isSticky)
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+    console.log(isSticky)
+    console.log(opacity)
 
     return (
         <>
             <div className="container">
-                <div className={`navbar ${isSticky ? "sticky" : ""}`}>
-                    {!isSticky ? (
-                        <div className="brand">B-mart</div>
-                    ) : (
-                        <Input
-                            type="text"
-                            placeholder="Search item"
-                            className="search-navbar"
-                        />
-                    )}
+                <div className="">
+                    <div className={`navbar ${isSticky ? "sticky" : ""}`}
+                        style={{
+                            backgroundColor: `rgba(46, 125, 50, ${opacity})`,
+                            height: 45,
+                        }}>
+                        {!isSticky ? (
+                            <>
+                                <div className="navbar">
+                                    <div className="nav-icon">
+                                        <img className="icon" src={Message} alt="" onClick={chat} />
+                                        <img className="icon" src={Cart} alt="" onClick={cart} />
+                                        <img className="icon" src={Profile} alt="" onClick={profile} />
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <Input
+                                    type="text"
+                                    placeholder="Search item"
+                                    className={`search-navbar ${isSticky ? "show" : ""}`}
+                                />
 
-                    <div className="nav-icon">
-                        <img className="icon" src={Message} alt="" onClick={chat} />
-                        {/* <img className="icon" src={Order} alt="" onClick={order} /> */}
-                        <img className="icon" src={Cart} alt="" onClick={cart} />
-                        <img className="icon" src={Profile} alt="" onClick={profile} />
+                                <div className="nav-icon">
+                                    <img className="icon" src={Message} alt="" onClick={chat} />
+                                    <img className="icon" src={Cart} alt="" onClick={cart} />
+                                    <img className="icon" src={Profile} alt="" onClick={profile} />
+                                </div>
+
+                            </>
+                        )}
                     </div>
-                </div>
-                <div className="search-bar">
-                    <Input type="text" placeholder="Search item" className="search-input" />
-                    <img className="icon" src={Search} alt="" />
-                </div>
-                <div className="carousel">
-                    <Carousel autoplay>
-                        <div >
-                            <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>
-                        </div>
-                        <div>
-                            <div className="img-carousel" style={{ backgroundImage: `url(${img2})` }}></div>
-                        </div>
-                        <div>
-                            <div className="img-carousel" style={{ backgroundImage: `url(${img3})` }}></div>
-                        </div>
-                        <div>
-                            <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>
-                        </div>
-                    </Carousel>
+                    <div className="brand">B-mart</div>
+                    <div className="search-bar">
+                        <Input type="text" placeholder="Search item" className="search-input" />
+                        <img className="icon" src={Search} alt="" />
+                    </div>
 
+                    <div className="carousel">
+                        <Carousel autoplay>
+                            <div >
+                                <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>
+                            </div>
+                            <div>
+                                <div className="img-carousel" style={{ backgroundImage: `url(${img2})` }}></div>
+                            </div>
+                            <div>
+                                <div className="img-carousel" style={{ backgroundImage: `url(${img3})` }}></div>
+                            </div>
+                            <div>
+                                <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>
+                            </div>
+                        </Carousel>
+
+                    </div>
                 </div>
                 <div className="category">
                     <h3>Kategory</h3>
                     <div className="card-category">
                         <Card
                             hoverable
-                            style={{ width: 85,height:135, marginBottom: 15 }}
+                            style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
                                 <img
                                     style={{ height: 85 }}
@@ -107,7 +132,7 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 85, height:135, marginBottom: 15 }}
+                            style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
                                 <img
                                     style={{ height: 85 }}
@@ -122,7 +147,7 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 85, height:135, marginBottom: 15 }}
+                            style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
                                 <img
                                     style={{ height: 85 }}
@@ -137,7 +162,7 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 85, height:135, marginBottom: 15 }}
+                            style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
                                 <img
                                     style={{ height: 85 }}
@@ -152,7 +177,7 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 85, height:135, marginBottom: 15 }}
+                            style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
                                 <img
                                     style={{ height: 85 }}
@@ -167,7 +192,7 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 85, height:135, marginBottom: 15 }}
+                            style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
                                 <img
                                     style={{ height: 85 }}
@@ -182,7 +207,7 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 85, height:135, marginBottom: 15 }}
+                            style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
                                 <img
                                     style={{ height: 85 }}
@@ -197,7 +222,7 @@ function Home() {
 
                         <Card
                             hoverable
-                            style={{ width: 85, height:135, marginBottom: 15 }}
+                            style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
                                 <img
                                     style={{ height: 85 }}

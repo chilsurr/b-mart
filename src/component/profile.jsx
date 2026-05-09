@@ -2,7 +2,7 @@ import { Badge } from 'antd';
 
 import { useNavigate } from "react-router-dom"
 import Arrow from "../assets/arrow.png"
-import Arrow_right from "../assets/right-arrow.png"
+import ProfDetail from "../assets/prof-detail.png"
 
 import waiting from "../assets/waiting-box.png"
 import pickUp from "../assets/package.png"
@@ -63,28 +63,28 @@ function Profile() {
                                 <div>08123654789543</div>
                             </div>
                         </div>
-                        <img className="icon" src={Arrow_right} alt="" />
+                        <img className="icon" src={ProfDetail} alt="" />
                     </div>
 
                     <div className="menu">
                         <div className="menu-item">
                             <span>Ubah Profil</span>
-                            <img className="icon" src={Arrow_right} alt="" />
+                            <img className="icon" src={ProfDetail} alt="" />
                         </div>
 
                         <div className="menu-item">
                             <span>Ubah Kata Sandi</span>
-                            <img className="icon" src={Arrow_right} alt="" />
+                            <img className="icon" src={ProfDetail} alt="" />
                         </div>
 
                         <div className="menu-item">
                             <span>Login dengan Biometri</span>
-                            <img className="icon" src={Arrow_right} alt="" />
+                            <img className="icon" src={ProfDetail} alt="" />
                         </div>
 
                         <div className="menu-item">
                             <span>Daftar Alamat</span>
-                            <img className="icon" src={Arrow_right} alt="" />
+                            <img className="icon" src={ProfDetail} alt="" />
                         </div>
 
                         <div className="menu-item">

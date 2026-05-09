@@ -7,8 +7,9 @@ function Register() {
   return (
     <div className="register-container">
       <div className="register-card">
-        {/* <h1 className="register-title">Create Account</h1>
-        <p className="register-subtitle">Sign up to get started</p> */}
+        <div className="regist-tittle">
+          <div >Register</div>
+        </div>
 
         <form className="register-form">
           <input className="input" type="text" placeholder="Enter your full name" />

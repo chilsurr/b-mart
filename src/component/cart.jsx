@@ -59,6 +59,20 @@ function Cart() {
             price: 7000,
             quantity: 1,
             img: imgCat4
+        },
+        {
+            id: 7,
+            name: "Teh Botol Sosro",
+            price: 5000,
+            quantity: 1,
+            img: imgCat3
+        },
+        {
+            id: 8,
+            name: "Susu Ultra Milk",
+            price: 7000,
+            quantity: 1,
+            img: imgCat4
         }
     ]);
 
@@ -105,18 +119,21 @@ function Cart() {
                                 onChange={() => onChange(item.id)}
                             />
                             <img src={item.img} alt={item.name} width={80} />
-                            <div>
+                            <div className="cart-desc">
                                 <h3>{item.name}</h3>
                                 <p>Rp. {item.price}</p>
                             </div>
-                            <div>
-                                <button onClick={() => kurang(item.id)}>-</button>
-                                <span>{item.quantity}</span>
-                                <button onClick={() => tambah(item.id)}>+</button>
+                            <div className="qty-control">
+                                <button className="qty-btn" onClick={() => kurang(item.id)}>
+                                    −
+                                </button>
+                                <span className="qty-value">{item.quantity}</span>
+                                <button className="qty-btn" onClick={() => tambah(item.id)}>
+                                    +
+                                </button>
                             </div>
                         </div>
                     ))}
-                    <br />
                 </div>
                 <div className="footer-bar">
                     <Checkbox className="check-all" indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>

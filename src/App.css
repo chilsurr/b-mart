@@ -496,7 +496,8 @@
   border-radius: 5px;
   border: none;
   color: #fff;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: bold;
   background: var(--primary-color);
 }
 
@@ -629,7 +630,7 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  height: 65%;
+  height: 55%;
   box-sizing: border-box;
 }
 
@@ -926,9 +927,13 @@
 
   .container {
     width: 100%;
-    margin: 20px auto;
+    margin: 0 auto;
     box-sizing: border-box;
     /* padding: 20px; */
+  }
+
+  .header{
+    background: linear-gradient(180deg, #2E7D32, #fff);
   }
 
   .nav-icon img {
@@ -937,9 +942,16 @@
 
   .navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    /* transition: all 0.3s ease; */
+    justify-content: flex-end;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: transparent;
+    z-index: 1000;
+    padding: 10px 15px;
+    box-sizing: border-box;
   }
 
   .navbar.sticky {
@@ -955,10 +967,18 @@
   }
 
   .search-navbar {
+    opacity: 0;
     height: 35px;
-    flex: 1;
     margin-right: 12px;
     padding: 4px 8px;
+  }
+
+  /* .search-navbar.show {
+    animation: fadeSlideDown 0.3s ease forwards;
+  } */
+
+  .search-navbar.show {
+    animation: fadeIn 0.3s ease forwards;
   }
 
   .search-navbar:focus {
@@ -989,7 +1009,7 @@
   }
 
   .carousel {
-    margin-top: 40px;
+    margin-top: 20px;
   }
 
   .img-carousel {
@@ -1160,6 +1180,167 @@
     font-weight: 500;
   }
 
+
+  /* cart */
+  .cart-container {
+    height: 100vh;
+  }
+
+  .head-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: #fff;
+    z-index: 1000;
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    padding-bottom: 15px;
+    background-color: var(--primary-color);
+  }
+
+  .head-bar div {
+    margin-left: 15px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .content-cart {
+    padding: 15px 10px 60px;
+  }
+
+  .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    /* background: linear-gradient(135deg, #C9D9EA , #DDE5EC,  #EEF1F4); */
+    background: linear-gradient(135deg, #adc5b7, #C4D1C9, #D8E0DB);
+  }
+
+  .cart-item img {
+    width: 90px;
+    height: auto;
+  }
+
+  .cart-item h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .cart-item p {
+    margin: 4px 0 0;
+  }
+
+  .cart-item div:last-child {
+    width: 80px;
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 65px;
+    padding: 0 15px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-payment {
+    border: none !important;
+    width: 120px;
+    height: 40px;
+    font-weight: bold;
+    font-size: 18px;
+    /* border-radius: 5px; */
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+
+  .check-all {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .total-price {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .btn-payment:hover {
+    font-weight: bold;
+    border: 1px solid var(--primary-color) !important;
+    color: var(--primary-color) !important;
+  }
+
+  .ant-checkbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ant-checkbox-checked {
+    height: 20px;
+    width: 20px;
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  }
+
+  .ant-checkbox:hover {
+    border-color: var(--primary-color) !important;
+  }
+
+  .check-all .ant-checkbox.ant-checkbox-indeterminate .ant-checkbox-inner {
+    background-color: #52c41a !important;
+    border-color: #52c41a !important;
+  }
+
+  .ant-checkbox-checked::after {
+    width: 11px;
+    height: 12px;
+    border-color: #fff;
+  }
+
+  .qty-control {
+    display: flex;
+    align-items: center;
+
+  }
+
+  .qty-btn {
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 5px;
+    background: #f3f4f6;
+    color: #111;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .qty-btn:hover {
+    background: #e5e7eb;
+  }
+
+  .qty-value {
+    min-width: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+  }
+
   /* order */
   .container {
     background: #fff;
@@ -1250,15 +1431,199 @@
     justify-content: center !important;
   }
 
+  /* regist */
+  .regist-container {
+    min-height: 100vh;
+    background-color: var(--primary-color);
+    padding-top: 85px;
+    box-sizing: border-box;
+  }
+
+  .regist-header {
+    display: flex;
+    justify-content: center;
+    height: 40%;
+  }
+
+  .regist-logo {
+    width: 230px;
+    height: 230px;
+    background-color: #fff;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .regist-logo img {
+    width: 180px;
+    height: 180px;
+  }
+
+  .regist-content {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 55%;
+    box-sizing: border-box;
+  }
+
+  .regist-tittle {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+
+
+  /* Login.css */
+  .login-container {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    padding: 40px 30px;
+    border-radius: 10% 10% 0 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-card {
+    /* box-sizing: border-box; */
+    width: 90%;
+  }
+
+  .input {
+    /* padding: 12px 16px; */
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #555;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  /* Saat input aktif / diklik */
+  .input:focus {
+    border-color: var(--primary-color);
+    /* hijau */
+    box-shadow: 0 0 8px rgba(46, 125, 50, 0.35);
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+
+  .login-btn {
+    margin-top: 10px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .login-btn:hover {
+    background: #388E3C;
+  }
+
+  .register-text {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .register-text a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+
+
+  /* Register.css */
+  .register-container {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    padding: 40px 30px;
+    border-radius: 10% 10% 0 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .register-card {
+    /* box-sizing: border-box; */
+    width: 90%;
+  }
+
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .register-btn {
+    margin-top: 10px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .register-btn:hover {
+    background: #388E3C;
+  }
+
+  .login-text {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .login-text a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(-5px);
+      transform: scale(0.95);
     }
 
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1);
     }
   }
 
