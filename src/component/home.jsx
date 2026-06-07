@@ -1,6 +1,6 @@
 import { Input, Carousel, Card, Button } from "antd"
 import { useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Message from "../assets/messenger.png"
 import Cart from "../assets/cart.png"
@@ -16,7 +16,20 @@ import imgCat2 from "../assets/img/category2.png"
 import imgCat3 from "../assets/img/category3.png"
 import imgCat4 from "../assets/img/category4.png"
 
+import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+
+gsap.registerPlugin(MotionPathPlugin);
+
+
 function Home() {
+    const cartRef = useRef(null);
+
+    const [flyingItem, setFlyingItem] = useState(null);
+    const [cartCount, setCartCount] = useState(0);
+
+
     const navigate = useNavigate()
     const { Meta } = Card;
 
@@ -44,13 +57,200 @@ function Home() {
             console.log(newOpacity)
             setOpacity(newOpacity);
         };
-        console.log(isSticky)
+        // console.log(isSticky)
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-    console.log(isSticky)
-    console.log(opacity)
+    // console.log(isSticky)
+    // console.log(opacity)
+
+    useEffect(() => {
+        console.log("cartRef", cartRef.current);
+        console.log(Card?.outerHTML);
+    }, []);
+
+
+
+
+    const handleAddCart = (e) => {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+
+        const card = e.currentTarget.closest(".ant-card");
+        console.log("card =", card);
+
+        const img = card.querySelector("img");
+        console.log("img =", img);
+
+        const imgRect = img.getBoundingClientRect();
+        console.log("cartRef =", cartRef.current);
+
+
+        const cartRect = cartRef.current.getBoundingClientRect();
+        console.log(cartRect)
+
+        const startX = imgRect.left + imgRect.width / 2;
+        const startY = imgRect.top + imgRect.height / 2;
+
+        // const endX = cartRect.left + cartRect.width / 2;
+        // const endY = cartRect.top + cartRect.height / 2;
+
+
+        const clone = img.cloneNode(true);
+
+        clone.style.position = "fixed";
+        clone.style.left = `${startX}px`;
+        clone.style.top = `${startY}px`;
+        // clone.style.transform = "translate(-50%, -50%)";
+        clone.style.left = `${imgRect.left}px`;
+        clone.style.top = `${imgRect.top}px`;
+        clone.style.width = `${imgRect.width}px`;
+        clone.style.height = `${imgRect.height}px`;
+        clone.style.zIndex = "9999";
+        clone.style.pointerEvents = "none";
+        clone.style.borderRadius = "12px";
+
+        document.body.appendChild(clone);
+
+        const endX =
+            cartRect.left +
+            cartRect.width / 2 -
+            imgRect.width / 2;
+
+        const endY =
+            cartRect.top +
+            cartRect.height / 2 -
+            imgRect.height / 2;
+
+
+        // const endX =
+        //     cartRect.left +
+        //     cartRect.width / 2;
+
+        // const endY =
+        //     cartRect.top +
+        //     cartRect.height / 2;
+
+        // const endX =
+        //     cartRect.left +
+        //     cartRect.width / 2 -
+        //     imgRect.width / 4;
+
+        // const endY =
+        //     cartRect.top +
+        //     cartRect.height / 2 -
+        //     imgRect.height / 4;
+
+        const midX =
+            imgRect.left +
+            (endX - imgRect.left) / 2;
+
+        const midY =
+            imgRect.top - 150;
+
+        console.log({
+            endX,
+            endY
+        });
+
+        const marker = document.createElement("div");
+
+        marker.style.position = "fixed";
+        marker.style.left = `${endX}px`;
+        marker.style.top = `${endY}px`;
+        marker.style.width = "8px";
+        marker.style.height = "8px";
+        marker.style.background = "red";
+        marker.style.borderRadius = "50%";
+        marker.style.zIndex = "999999";
+        marker.style.transform = "translate(-50%, -50%)";
+
+        document.body.appendChild(marker);
+
+        const endMarker = document.createElement("div");
+
+        endMarker.style.position = "fixed";
+        endMarker.style.left = `${endX}px`;
+        endMarker.style.top = `${endY}px`;
+        endMarker.style.width = "12px";
+        endMarker.style.height = "12px";
+        endMarker.style.background = "blue";
+        endMarker.style.borderRadius = "50%";
+        endMarker.style.zIndex = "999999";
+
+        document.body.appendChild(endMarker);
+
+        gsap.to(clone, {
+            duration: 0.8,
+            ease: "power2.out",
+            motionPath: {
+                path: [
+                    { x: 0, y: 0 },
+                    {
+                        x: midX - imgRect.left,
+                        y: midY - imgRect.top,
+                    },
+                    {
+                        x: endX - imgRect.left,
+                        y: endY - imgRect.top,
+                    },
+                ],
+                // path: [
+                //     { x: 0, y: 0 },
+                //     {
+                //         x: (endX - startX) / 2,
+                //         y: -200,
+                //     },
+                //     {
+                //         x: endX - startX,
+                //         y: endY - startY,
+                //     },
+                // ],
+                curviness: 1.5,
+            },
+            scale: 0.25,
+            onComplete: () => {
+                document.body.removeChild(clone);
+
+                gsap.fromTo(
+                    cartRef.current,
+                    {
+                        scale: 1,
+                    },
+                    {
+                        scale: 1.3,
+                        duration: 0.15,
+                        yoyo: true,
+                        repeat: 1,
+                    }
+                );
+
+                // update cart
+                // setCartCount(prev => prev + 1);
+            },
+        });
+        console.log("cartRect", {
+            left: cartRect.left,
+            top: cartRect.top,
+            width: cartRect.width,
+            height: cartRect.height,
+        });
+
+        console.log("imgRect", {
+            left: imgRect.left,
+            top: imgRect.top,
+            width: imgRect.width,
+            height: imgRect.height,
+        });
+    };
+
+
+
+
+
 
     return (
         <>
@@ -66,7 +266,9 @@ function Home() {
                                 <div className="navbar">
                                     <div className="nav-icon">
                                         <img className="icon" src={Message} alt="" onClick={chat} />
-                                        <img className="icon" src={Cart} alt="" onClick={cart} />
+                                        <div ref={cartRef}>
+                                            <img className="icon" src={Cart} alt="" onClick={cart} />
+                                        </div>
                                         <img className="icon" src={Profile} alt="" onClick={profile} />
                                     </div>
                                 </div>
@@ -81,7 +283,9 @@ function Home() {
 
                                 <div className="nav-icon">
                                     <img className="icon" src={Message} alt="" onClick={chat} />
-                                    <img className="icon" src={Cart} alt="" onClick={cart} />
+                                    <div >
+                                        <img className="icon" src={Cart} ref={cartRef} alt="" onClick={cart} />
+                                    </div>
                                     <img className="icon" src={Profile} alt="" onClick={profile} />
                                 </div>
 
@@ -241,7 +445,7 @@ function Home() {
                     <div className="card">
                         {Array.from({ length: 15 }).map((_, index) => (
                             <Card
-                                onClick={detail}
+                                // onClick={detail}
                                 key={index}
                                 hoverable
                                 style={{ width: 120, flexShrink: 0 }}
@@ -260,7 +464,11 @@ function Home() {
                                     </div>
                                     <div className="price">Rp 5.800</div>
 
-                                    <button className="btn-add-cart">Add Cart</button>
+                                    <button
+                                        className="btn-add-cart" onClick={handleAddCart}
+                                    >
+                                        Add Cart
+                                    </button>
                                 </div>
                             </Card>
                         ))}
@@ -292,7 +500,7 @@ function Home() {
                                     </div>
                                     <div className="price">Rp 5.800</div>
 
-                                    <button className="btn-add-cart">Add Cart</button>
+                                    <button className="btn-add-cart" onClick={handleAddCart}>Add Cart</button>
                                 </div>
                             </Card>
                         ))}
@@ -323,7 +531,7 @@ function Home() {
                                     </div>
                                     <div className="price">Rp 5.800</div>
 
-                                    <button className="btn-add-cart">Add Cart</button>
+                                    <button className="btn-add-cart" onClick={handleAddCart}>Add Cart</button>
                                 </div>
                             </Card>
                         ))}
@@ -353,14 +561,47 @@ function Home() {
                                     </div>
                                     <div className="price">Rp 5.800</div>
 
-                                    <button className="btn-add-cart">Add Cart</button>
+                                    <button className="btn-add-cart" onClick={handleAddCart}>Add Cart</button>
                                 </div>
                             </Card>
                         ))}
                     </div>
                 </div>
             </div>
+
+
+            {/* <AnimatePresence>
+                {flyingItem && (
+                    <motion.img
+                        src={flyingItem.image}
+                        alt=""
+                        initial={{
+                            position: "fixed",
+                            left: flyingItem.startX,
+                            top: flyingItem.startY,
+                            width: 80,
+                            zIndex: 9999,
+                        }}
+                        animate={{
+                            left: flyingItem.endX,
+                            top: flyingItem.endY,
+                            scale: 0.2,
+                            opacity: 0.5,
+                        }}
+                        transition={{
+                            duration: 0.8,
+                            ease: "easeInOut",
+                        }}
+                        onAnimationComplete={() => {
+                            setCartCount((v) => v + 1);
+                            setFlyingItem(null);
+                        }}
+                    />
+                )}
+            </AnimatePresence> */}
         </>
+
+
     )
 }
 export default Home
