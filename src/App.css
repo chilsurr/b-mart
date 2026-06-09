@@ -964,8 +964,8 @@
   }
 
   .icon {
-    width: 25px;
-    height: 25px;
+    width: 28px;
+    height: 28px;
   }
 
   .brand {
@@ -978,7 +978,7 @@
     width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
-    /* padding: 20px; */
+    padding-top: 10px;
   }
 
   .header {
@@ -997,9 +997,11 @@
     top: 0;
     left: 0;
     width: 100%;
+    /* height: 60px; */
+    /* background: red; */
     background: transparent;
     z-index: 1000;
-    padding: 10px 15px;
+    padding: 8px 15px;
     box-sizing: border-box;
   }
 
@@ -1108,8 +1110,9 @@
 
   .card-body {
     text-align: left;
+    width: 100%;
     margin: 0 5px;
-    height: 100px;
+    height: 80px;
   }
 
   .product-title {
@@ -1151,13 +1154,21 @@
   /* detail */
   .detail-container {
     padding: 10px;
+    padding-top: 65px;
   }
 
   .detail-header {
-    display: grid;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    background-color: var(--primary-color);
+    /* display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 12px; */
   }
 
 
@@ -1392,6 +1403,64 @@
     font-weight: 600;
     color: #111827;
   }
+
+  /* Modal */
+  .ant-modal-confirm .ant-modal-content {
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .ant-modal-confirm-title {
+    font-size: 16px !important;
+    font-weight: 600;
+  }
+
+  .ant-modal-confirm-content {
+    font-size: 14px !important;
+    line-height: 1.5;
+  }
+
+  .ant-modal-confirm-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .ant-modal-confirm-btns button {
+    flex: 1;
+    height: 48px;
+    margin: 0 !important;
+    border-radius: 12px;
+  }
+
+  .ant-btn.cart-delete-btn {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #fff !important;
+    font-weight: 600;
+  }
+
+  .ant-btn.cart-delete-btn:hover {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    opacity: 0.9;
+  }
+
+  .ant-btn.cart-cancel-btn {
+    font-weight: 500;
+  }
+
+  /* .delete-cart-btn {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #fff !important;
+  }
+
+  .delete-cart-btn:hover {
+    opacity: 0.9;
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  } */
 
   /* order */
   .order-container .container {
