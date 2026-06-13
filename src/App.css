@@ -1149,6 +1149,116 @@
     border: none;
   }
 
+  /* search page */
+  .search-page {
+    padding: 10px 15px;
+    background: #ffffff;
+    min-height: 100vh;
+  }
+
+  /* Section */
+  .history-section,
+  .category-section {
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .search-component{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+  }
+
+  .search-component .icon{
+    margin-left: 10px;
+  }
+
+  .section-header h2,
+  .category-section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #222;
+    margin: 0;
+  }
+
+  .clear-btn {
+    background: none;
+    border: none;
+    color: #e53935;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* History Tags */
+  .history-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .history-tag {
+    background: #fff;
+    border: 1px solid #d8d8d8;
+    border-radius: 999px;
+    padding: 10px 18px;
+    color: #2f6ea8;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .history-tag:hover {
+    border-color: #5aa9e6;
+    background: #f7fbff;
+  }
+
+  /* Category */
+  .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .category-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+  }
+
+  .category-image {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    background: #f5f3ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .category-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .category-item span {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+  }
+
+
 
 
   /* detail */
@@ -1552,6 +1662,170 @@
     align-items: center !important;
     justify-content: center !important;
   }
+
+  /* payment */
+  .payment-page {
+    width: 100%;
+    min-height: 100vh;
+    background: #f5f5f5;
+    margin-top: 60px;
+    /* font-family: Arial, Helvetica, sans-serif; */
+  }
+
+  /* Header */
+  .payment-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--primary-color);
+    color: #fff;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+  }
+
+  .payment-header div {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .no-invoice {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #000;
+  }
+
+
+  /* Payment Methods */
+  .payment-methods {
+    background: white;
+    margin-top: 8px;
+  }
+
+  .payment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .payment-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .payment-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .payment-name {
+    font-size: 14px;
+    color: #333;
+  }
+
+  /* .payment-item input[type="radio"] {
+  width: 18px;
+  height: 18px;
+} */
+
+  /* Summary */
+  .summary {
+    margin-top: 10px;
+    background: white;
+    padding: 16px;
+  }
+
+  .summary h3 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: #333;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #555;
+  }
+
+  .discount {
+    color: #d50000;
+  }
+
+  .summary hr {
+    border: none;
+    border-top: 1px solid #ececec;
+    margin: 16px 0;
+  }
+
+  /* Total */
+  .total-payment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .total-payment h4 {
+    font-size: 18px;
+    color: #333;
+  }
+
+  .total-payment span {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .boldd {
+    color: #000;
+    font-weight: 500;
+  }
+
+  /* Footer */
+  .payment-footer {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+  }
+
+  .pay-button {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 25px;
+    background: #cfcfcf;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .pay-button:enabled {
+    background: var(--primary-color);
+  }
+
+  .pay-button:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+
+
+
+
+
 
   /* regist */
   .regist-container {

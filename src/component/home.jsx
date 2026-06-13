@@ -119,6 +119,10 @@ function Home() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const handleSearchFocus = () =>{
+        navigate("/search/")
+    }
+
 
     return (
         <>
@@ -147,6 +151,7 @@ function Home() {
                                     type="text"
                                     placeholder="Search item"
                                     className={`search-navbar ${isSticky ? "show" : ""}`}
+                                    onFocus={handleSearchFocus}
                                 />
 
                                 <div className="nav-icon">
@@ -162,7 +167,7 @@ function Home() {
                     </div>
                     <div className="brand">B-mart</div>
                     <div className="search-bar">
-                        <Input type="text" placeholder="Search item" className="search-input" />
+                        <Input type="text" placeholder="Search item" className="search-input"  onFocus={handleSearchFocus}/>
                         <img className="icon" src={Search} alt="" />
                     </div>
 
