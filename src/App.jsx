@@ -15,6 +15,7 @@ import Login from './component/login'
 import Register from './component/register'
 import Payment from './component/payment-methode'
 import Search from './component/search'
+import ResultSearch from './component/result-serach'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -35,6 +36,7 @@ function App() {
         <Route path='order/' element={<Order />} />
         <Route path='payment/' element={<Payment />} />
         <Route path='search/' element={<Search />} />
+        <Route path='result-search/' element={<ResultSearch />} />
       </Routes>
     </Router>
   )

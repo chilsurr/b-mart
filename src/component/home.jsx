@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState, useRef } from "react";
 import { animateToCart } from "../utils/addcartanimation";
 import dataItems from "../utils/dataproduct";
+import MyCard from "../utils/mycard";
 
 import Message from "../assets/messenger.png"
 import Cart from "../assets/cart.png"
@@ -21,62 +22,13 @@ import imgCat4 from "../assets/img/category4.png"
 // import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { object } from "framer-motion/client";
 
 gsap.registerPlugin(MotionPathPlugin);
 
 
 function Home() {
 
-
-
-
-    const MyCard = ({
-        item,
-        cartRef,
-        imageRefs,
-        animateToCart,
-        detail
-    }) => {
-        return (
-            <Card
-                hoverable
-                style={{ width: 120, flexShrink: 0 }}
-                cover={
-                    <img
-                        style={{ height: 120 }}
-                        draggable={false}
-                        alt={item.nama}
-                        src={item.img}
-                        ref={(el) => (imageRefs.current[item.id] = el)}
-                    />
-                }
-                onClick={() => detail(item.id)}
-            >
-                <div className="card-body" >
-                    <div className="product-title">
-                        <span>{item.nama}</span>
-                    </div>
-
-                    <div className="price">
-                        Rp {item.price?.toLocaleString("id-ID")}
-                    </div>
-
-                    <button
-                        className="btn-add-cart"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            animateToCart({
-                                imageElement: imageRefs.current[item.id],
-                                cartElement: cartRef.current,
-                            })
-                        }}
-                    >
-                        Add Cart
-                    </button>
-                </div>
-            </Card>
-        );
-    };
 
     const imageRefs = useRef({});
     const cartRef = useRef(null);
@@ -119,10 +71,24 @@ function Home() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const handleSearchFocus = () =>{
+    const handleSearchFocus = () => {
         navigate("/search/")
     }
 
+    const resultCategory = (category) => {
+        console.log(category)
+        navigate("/result-search", { state: { category } })
+    }
+
+    const categories = Object.values(
+        dataItems.reduce((acc, item) => {
+            if (!acc[item.category]) {
+                acc[item.category] = item
+            }
+            return acc
+        }, {})
+    )
+    console.log(categories)
 
     return (
         <>
@@ -167,7 +133,7 @@ function Home() {
                     </div>
                     <div className="brand">B-mart</div>
                     <div className="search-bar">
-                        <Input type="text" placeholder="Search item" className="search-input"  onFocus={handleSearchFocus}/>
+                        <Input type="text" placeholder="Search item" className="search-input" onFocus={handleSearchFocus} />
                         <img className="icon" src={Search} alt="" />
                     </div>
 
@@ -192,7 +158,23 @@ function Home() {
                 <div className="category">
                     <h3>Kategory</h3>
                     <div className="card-category">
-                        <Card
+                        {categories.map((item) => (
+                            <Card
+                                hoverable
+                                style={{ width: 85, height: 135, marginBottom: 15 }}
+                                cover={
+                                    <img
+                                        style={{ height: 85 }}
+                                        draggable={false}
+                                        alt="example"
+                                        src={item.img}
+                                    />
+                                }
+                            >
+                                <span>{item.category}</span>
+                            </Card>
+                        ))}
+                        {/* <Card
                             hoverable
                             style={{ width: 85, height: 135, marginBottom: 15 }}
                             cover={
@@ -310,7 +292,7 @@ function Home() {
                             }
                         >
                             <span>Kecantikan</span>
-                        </Card>
+                        </Card> */}
                     </div>
                 </div>
                 <div className="makanan grouping">
@@ -351,10 +333,10 @@ function Home() {
                 </div>
 
                 <div className="kebutuhan-rumah grouping">
-                    <h3>Kebutuhan Rumah</h3>
+                    <h3>Perawatan Rumah</h3>
                     <div className="card">
                         {dataItems
-                            .filter((item) => item.category === "Kebutuhan Rumah")
+                            .filter((item) => item.category === "Perawatan Rumah")
                             .map((item) => (
                                 <MyCard
                                     key={item.id}

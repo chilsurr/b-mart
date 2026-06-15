@@ -1,6 +1,8 @@
 import { Input } from "antd";
+import { useNavigate } from "react-router-dom";
 
 import Search from "../assets/search.png"
+import Arrow from "../assets/arrow.png"
 
 import imgCat1 from "../assets/img/category1.png"
 import imgCat2 from "../assets/img/category2.png"
@@ -44,11 +46,23 @@ function SearchPage() {
             image: imgCat4,
         },
     ];
+
+    const navigate = useNavigate()
+    function back() {
+        navigate("/")
+    }
+
+    const resultCategory = (category) =>{
+        console.log(category)
+        navigate("/result-search", {state: {category}})
+    }
+
     return (
         <div className="search-page">
             <div className="search-component">
-                <Input type="text" placeholder="Search item" className="search-input"/>
-                <img className="icon" src={Search} alt="" />
+                <img className="icon" src={Arrow} alt="" onClick={back} />
+                <Input type="text" placeholder="Search item" className="search-input" />
+                {/* <img className="icon" src={Search} alt="" /> */}
             </div>
             {/* Riwayat Pencarian */}
             <section className="history-section">
@@ -80,6 +94,7 @@ function SearchPage() {
                         <div
                             key={category.name}
                             className="category-item"
+                            onClick={()=> resultCategory(category.name)}
                         >
                             <div className="category-image">
                                 <img

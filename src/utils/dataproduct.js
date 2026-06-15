@@ -12,7 +12,7 @@ const dataItems = [
     // =========================
     {
         id: 1,
-        nama: "Roti Cokelat Premium",
+        nama: "Roti Cokelat Premium bla bla  bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
         price: 8500,
         category: "Makanan",
         deskripsi: `Roti lembut dengan tekstur yang empuk dan lezat.
@@ -256,13 +256,13 @@ Pilihan favorit untuk minuman ringan.`,
     },
 
     // =========================
-    // KEBUTUHAN RUMAH
+    // Perawatan RUMAH
     // =========================
     {
         id: 17,
         nama: "Deterjen Cair",
         price: 28000,
-        category: "Kebutuhan Rumah",
+        category: "Perawatan Rumah",
         deskripsi: `Deterjen cair yang efektif mengangkat noda.
 Memiliki aroma segar yang tahan lama.
 Mudah larut dalam air saat digunakan.
@@ -277,7 +277,7 @@ Pilihan praktis untuk mencuci setiap hari.`,
         id: 18,
         nama: "Sabun Cuci Piring",
         price: 12000,
-        category: "Kebutuhan Rumah",
+        category: "Perawatan Rumah",
         deskripsi: `Membersihkan lemak dan noda membandel.
 Menghasilkan busa melimpah dan efektif.
 Aroma segar yang nyaman digunakan.
@@ -292,7 +292,7 @@ Pilihan tepat untuk rumah tangga.`,
         id: 19,
         nama: "Pembersih Lantai",
         price: 18000,
-        category: "Kebutuhan Rumah",
+        category: "Perawatan Rumah",
         deskripsi: `Membersihkan lantai dengan efektif dan cepat.
 Meninggalkan aroma harum yang tahan lama.
 Cocok untuk berbagai jenis lantai.
@@ -307,9 +307,9 @@ Pilihan ideal untuk keluarga.`,
         id: 20,
         nama: "Tisu Gulung",
         price: 15000,
-        category: "Kebutuhan Rumah",
+        category: "Perawatan Rumah",
         deskripsi: `Tisu lembut dengan daya serap tinggi.
-Cocok untuk berbagai kebutuhan rumah tangga.
+Cocok untuk berbagai Perawatan rumah tangga.
 Praktis digunakan di berbagai ruangan.
 Kemasan higienis dan aman disimpan.
 Nyaman digunakan oleh seluruh keluarga.
@@ -322,7 +322,7 @@ Produk penting yang selalu dibutuhkan.`,
         id: 21,
         nama: "Pewangi Ruangan",
         price: 22000,
-        category: "Kebutuhan Rumah",
+        category: "Perawatan Rumah",
         deskripsi: `Menjaga ruangan tetap harum dan segar.
 Memiliki aroma yang tahan lama.
 Cocok digunakan di rumah maupun kantor.
@@ -337,7 +337,7 @@ Pilihan tepat untuk suasana menyenangkan.`,
         id: 22,
         nama: "Kantong Sampah",
         price: 10000,
-        category: "Kebutuhan Rumah",
+        category: "Perawatan Rumah",
         deskripsi: `Kantong sampah kuat untuk kebutuhan harian.
 Mudah digunakan dan disimpan.
 Membantu menjaga kebersihan lingkungan rumah.
@@ -352,7 +352,7 @@ Produk wajib di setiap rumah.`,
         id: 23,
         nama: "Spons Cuci",
         price: 7000,
-        category: "Kebutuhan Rumah",
+        category: "Perawatan Rumah",
         deskripsi: `Spons berkualitas untuk membersihkan dapur.
 Memiliki permukaan yang efektif mengangkat kotoran.
 Nyaman digunakan dan mudah digenggam.
@@ -367,7 +367,7 @@ Pilihan praktis untuk rumah tangga.`,
         id: 24,
         nama: "Pengharum Lemari",
         price: 12000,
-        category: "Kebutuhan Rumah",
+        category: "Perawatan Rumah",
         deskripsi: `Menjaga aroma lemari tetap segar.
 Membantu mengurangi bau tidak sedap.
 Praktis digunakan tanpa perawatan tambahan.

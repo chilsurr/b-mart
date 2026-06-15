@@ -1082,7 +1082,7 @@
     /* justify-content: space-around; */
   }
 
-  .ant-card-body {
+  .card-category .ant-card-body {
     /* text-align: center !important; */
     padding: 5px !important;
     display: flex;
@@ -1108,26 +1108,41 @@
     display: none;
   }
 
-  .card-body {
+  /* .card .ant-card-body {
     text-align: left;
-    width: 100%;
-    margin: 0 5px;
-    height: 80px;
+    height: 60px !important;
+    box-sizing: border-box;
+  } */
+
+  .card .ant-card {
+    height: 225px;
+    /* border: 1px solid #111 !important; */
   }
+
+  /* .card-body {
+    /* text-align: left; */
+  /* width: 100%; */
+  /* height: 60px !important; */
+  /* padding: 5px !important; */
+  /* box-sizing: border-box; */
+  /* display: flex;
+    /* justify-content: center; */
+  /* align-self: center;  */
+  /* } */
 
   .product-title {
     font-size: 12px;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     /* Jumlah baris maksimal */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
 
     /* Supaya tinggi card konsisten, tambahkan min-height */
-    line-height: 1.5em;
+    line-height: 1.4em;
     /* Tentukan tinggi baris */
-    height: 4.5em;
+    height: 3em;
     /* 3 baris x 1.5 line-height */
   }
 
@@ -1159,7 +1174,7 @@
   /* Section */
   .history-section,
   .category-section {
-    margin-top: 20px;
+    margin-top: 60px;
     margin-bottom: 30px;
   }
 
@@ -1170,19 +1185,29 @@
     margin-bottom: 16px;
   }
 
-  .search-component{
+  .search-component {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 15px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    margin: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    z-index: 999;
+    /* margin: 10px; */
   }
 
-  .search-component .icon{
-    margin-left: 10px;
+  .search-component .icon {
+    margin-right: 10px;
+
   }
 
   .section-header h2,
   .category-section h2 {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
     color: #222;
     margin: 0;
@@ -1192,7 +1217,7 @@
     background: none;
     border: none;
     color: #e53935;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
   }
@@ -1210,7 +1235,7 @@
     border-radius: 999px;
     padding: 10px 18px;
     color: #2f6ea8;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     transition: 0.2s;
   }
@@ -1220,7 +1245,6 @@
     background: #f7fbff;
   }
 
-  /* Category */
   .category-list {
     display: flex;
     flex-direction: column;
@@ -1236,8 +1260,8 @@
   }
 
   .category-image {
-    width: 64px;
-    height: 64px;
+    width: 55px;
+    height: 55px;
     border-radius: 10px;
     background: #f5f3ff;
     display: flex;
@@ -1253,11 +1277,85 @@
   }
 
   .category-item span {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 500;
     color: #333;
   }
 
+  /* result-search */
+
+  .result-container {
+    padding: 0 16px;
+    padding-top: 65px;
+  }
+
+  .result-card {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .result-card .ant-card {
+    width: 180px !important;
+    height: 295px !important;
+
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .result-card .ant-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .result-card .ant-card img {
+    margin: 10px auto;
+    height: 160px !important;
+    width: 160px !important;
+  }
+
+  .product-title {
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Jumlah baris maksimal */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* Supaya tinggi card konsisten, tambahkan min-height */
+    line-height: 1.4em;
+    /* Tentukan tinggi baris */
+    height: 3em;
+    /* 3 baris x 1.5 line-height */
+  }
+
+  .result-card .price {
+    margin: 3px 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .result-card .btn-add-cart {
+    margin: 0 auto;
+    background-color: var(--primary-color);
+    font-size: 14px;
+    border-radius: 5px;
+    width: 100%;
+    height: 30px;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+  }
+
+  .result-container .search-component .icon {
+    margin-right: 0;
+  }
+
+  .result-container .search-input{
+    margin: 0 10px;
+  }
 
 
 
