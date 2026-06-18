@@ -78,20 +78,28 @@ function Chat() {
         },
     ];
 
-
+    const inputRef = useRef(null);
     const [text, setText] = useState("")
 
     const [dataRender, setDataRender] = useState(messages)
 
     function handleSend() {
+        const message = text.trim();
+
+        if (!message) {
+            inputRef.current?.focus();
+            return;
+        }
+
         const dumy = {
             id: dataRender.length + 1,
             side: "right",
-            text: text
+            text: message
         }
 
         setDataRender([...dataRender, dumy])
         setText("")
+        inputRef.current?.focus();
     }
 
 
@@ -138,6 +146,7 @@ function Chat() {
                 <button className="chat-add">＋</button>
 
                 <input
+                    ref={inputRef}
                     type="text"
                     placeholder="Tulis Pesan..."
                     value={text}

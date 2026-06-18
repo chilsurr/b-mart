@@ -1,4 +1,4 @@
-import { Badge } from 'antd';
+import { Badge, Select, ConfigProvider } from 'antd'; "status-order"
 
 import { useNavigate } from "react-router-dom"
 import Arrow from "../assets/arrow.png"
@@ -17,8 +17,8 @@ function Profile() {
         navigate("/")
     }
 
-    function order() {
-        navigate("/order/")
+    function order(status) {
+        navigate("/order/", { state: { status } })
     }
 
     const Switch = ({ checked, onChange }) => (
@@ -27,6 +27,7 @@ function Profile() {
             <span />
         </label>
     );
+
     return (
         <>
             <div className="profile">
@@ -35,19 +36,19 @@ function Profile() {
                     <h3>Akun Saya</h3>
                 </div>
                 <div className="tracking-order">
-                    <div className="status-order" onClick={order}>
+                    <div className="status-order" onClick={() => order("On Process")}>
                         <Badge count={5}>
                             <img src={waiting} alt="" />
                         </Badge>
                         <div>On Process</div>
                     </div>
-                    <div className="status-order">
+                    <div className="status-order" onClick={() => order("Need Pick-up")}>
                         <Badge count={5}>
                             <img src={pickUp} alt="" />
                         </Badge>
                         <div>Need Pick-up</div>
                     </div>
-                    <div className="status-order">
+                    <div className="status-order" onClick={() => order("Done")}>
                         <Badge count={5}>
                             <img src={done} alt="" />
                         </Badge>
@@ -86,7 +87,25 @@ function Profile() {
                             <span>Daftar Alamat</span>
                             <img className="icon" src={ProfDetail} alt="" />
                         </div>
-
+                        <div className="menu-item">
+                            <span>Language</span>
+                            <ConfigProvider
+                                theme={{
+                                    token: {
+                                        colorPrimary: "#2E7D32",
+                                    },
+                                }}
+                            >
+                                <Select
+                                    defaultValue="ID"
+                                    style={{ width: 45, padding: 3, boxSizing: 'border-box' }}
+                                    options={[
+                                        { value: "ID", label: "ID" },
+                                        { value: "EN", label: "EN" }
+                                    ]}
+                                />
+                            </ConfigProvider>
+                        </div>
                         <div className="menu-item">
                             <span>Dark mode</span>
                             <Switch />

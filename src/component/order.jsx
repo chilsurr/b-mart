@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { Collapse } from "antd";
 
 
@@ -8,23 +8,12 @@ import Arrow from "../assets/arrow.png"
 import down from "../assets/down.png"
 import up from "../assets/up.png"
 
+import dataOrders from "../utils/dataorder"
+import dataItems from "../utils/dataproduct"
+
 
 
 function OrderList() {
-    const [openId, setOpenId] = useState(null);
-
-    useEffect(() => (
-        filter_order("On Process")
-    ), [])
-
-    const navigate = useNavigate()
-    function back() {
-        navigate("/")
-    }
-
-    const toggleDropdown = (id) => {
-        setOpenId(openId === id ? null : id);
-    };
 
     const data = [
         // ON PROCESS (4)
@@ -237,14 +226,43 @@ function OrderList() {
             ],
         },
     ];
+
+
+    const [openId, setOpenId] = useState(null);
+
+    const location = useLocation()
+    const status = location.state?.status ?? "On Process";
+    useEffect(() => (
+        filter_order(status)
+    ), [status])
+
+    const navigate = useNavigate()
+    function back() {
+        navigate("/profile/")
+    }
+
+    const toggleDropdown = (id) => {
+        setOpenId(openId === id ? null : id);
+    };
+
+
+    const dataOrderFix = dataOrders.map((item) => ({
+        ...item, items: item.items.map((item) => ({
+            ...dataItems.find((data) => data.id === item.id),
+            quantity: item.quantity
+        }))
+    }))
+    console.log(dataOrderFix)
+
     const [dataFilter, setDataFilter] = useState([])
 
     function filter_order(param) {
-        const data_order = data.filter((item) => {
+        console.log(param)
+        const data_order = dataOrderFix.filter((item) => {
             return item.status === param
         })
         setDataFilter(data_order)
-        console.log(dataFilter)
+        console.log(data_order)
     }
 
     const items = dataFilter.map((order) => ({
@@ -256,7 +274,7 @@ function OrderList() {
                 <div className="order-info">
                     <div className="status">{order.status}</div>
                     <div className="invoice">No Bon {order.invoice}</div>
-                    <div className="date">{order.date}</div>
+                    <div className="date">{order.tanggal} {order.jam}</div>
                 </div>
 
             </div>
@@ -265,15 +283,16 @@ function OrderList() {
         children: (
             <div className="order-body">
                 {order.items.map((item) => (
-                    <div key={item.product.id} className="item-row">
-                        {item.product.name}
+                    <div key={item.id} className="item-row">
+                        <div>{item.nama}</div>
+                        <div>{item.quantity}</div>
                     </div>
                 ))}
             </div>
         ),
     }));
 
-    const [tabActive, setTabActive] = useState("On Process")
+    const [tabActive, setTabActive] = useState(status)
 
     const tabs = [
         { value: "On Process" },
