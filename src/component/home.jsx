@@ -61,7 +61,7 @@ function Home() {
     useEffect(() => {
         const handleScroll = () => {
             setIsSticky(window.scrollY > 40);
-            const newOpacity = Math.min(scrollY / 50, 1);
+            const newOpacity = Math.min(scrollY / 40, 1);
             console.log(newOpacity)
             setOpacity(newOpacity);
         };
@@ -78,6 +78,11 @@ function Home() {
     const resultCategory = (category) => {
         console.log(category)
         navigate("/result-search", { state: { category } })
+    }
+
+    const handleCategory = (param) => {
+        console.log(param)
+        navigate("/search/" , {state: {param} })
     }
 
     const categories = Object.values(
@@ -160,6 +165,7 @@ function Home() {
                     <div className="card-category">
                         {categories.map((item) => (
                             <Card
+                                onClick={()=> handleCategory(item.category)}
                                 hoverable
                                 style={{ width: 85, height: 135, marginBottom: 15 }}
                                 cover={

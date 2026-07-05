@@ -22,6 +22,9 @@ export default function ProductDetail() {
     function cart() {
         navigate("/cart/")
     }
+    function chat() {
+        navigate("/chat/")
+    }
 
     const imageRefs = useRef({});
     const cartRef = useRef(null);
@@ -34,7 +37,7 @@ export default function ProductDetail() {
             <div className="detail-header">
                 <img className="icon" src={Arrow} onClick={back} />
                 <div>
-                    <img className="icon" src={Message} alt="" />
+                    <img className="icon" src={Message} alt="" onClick={chat}/>
                     <img className="icon" src={Cart} alt="" ref={cartRef} onClick={cart} />
                 </div>
             </div>
