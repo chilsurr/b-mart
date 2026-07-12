@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import Arrow from "../assets/arrow.png"
+import "../style/cart.css"
 
 import dataItems from "../utils/dataproduct"
 import dataCart from "../utils/datacart"
@@ -114,7 +115,7 @@ function Cart() {
         (total, item) => total + item.itemId.price * item.quantity, 0
     )
 
-    const goPayment = () => navigate("/payment/")
+    const goPayment = () => navigate("/payment/",{state :{cart}})
 
     return (
         <>

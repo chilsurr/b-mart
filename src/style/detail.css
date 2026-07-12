@@ -1,0 +1,94 @@
+/* HP kecil */
+@media (max-width: 480px) {
+    /* detail */
+      .detail-container {
+        padding: 10px;
+        padding-top: 65px;
+      }
+    
+      .detail-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px 15px;
+        box-sizing: border-box;
+        background-color: var(--primary-color);
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+    
+    
+      .detail-header div {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+    
+      .cover-img {
+        width: 350px;
+        margin: 0 auto;
+      }
+    
+      .product-image {
+        width: 100%;
+        height: 350px;
+        background: #ddd;
+        border-radius: 8px;
+        object-fit: cover;
+        margin-bottom: 12px;
+      }
+    
+      .product-info {
+        background: #e0e0e0;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+      }
+    
+      .product-info div:first-child {
+        font-weight: bold;
+      }
+    
+      .product-info div:last-child {
+        margin-top: 4px;
+      }
+    
+      .description {
+        background: #e0e0e0;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 14px;
+        margin-bottom: 60px;
+      }
+    
+      .footer-detail {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        height: 60px;
+        padding: 0 15px;
+        background-color: #fff;
+        display: flex;
+        box-shadow: 0 0 8px rgba(44, 45, 44, 0.35);
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+      }
+    
+      .add-cart-detail-btn {
+        padding: 10px 20px;
+        width: 220px;
+        height: 40px;
+        border: none;
+        border-radius: 5px;
+        background: var(--primary-color);
+        cursor: pointer;
+        font-weight: bold;
+        color: #fff;
+      }
+}

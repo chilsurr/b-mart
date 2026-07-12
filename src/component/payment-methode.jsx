@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Radio, Avatar, Alert, notification } from 'antd';
 import { ConfigProvider } from "antd";
+import dayjs from "dayjs";
+import "../style/payment.css"
 
 import Arrow from "../assets/arrow.png"
+import { useEffect } from "react";
 
 const PaymentPage = () => {
     const [selectedPayment, setSelectedPayment] = useState("");
@@ -81,6 +84,17 @@ const PaymentPage = () => {
         navigate("/cart/")
     }
 
+    const location = useLocation()
+
+    const cart = location.state?.cart || []
+    console.log(cart)
+    const [dataCart, setDataCart] = useState([])
+    useEffect(() => {
+        createInvoice()
+        getTotal()
+        setDataCart(cart)
+    }, [])
+
     const [isPaymentSucsess, setIsPaymentSucsess] = useState(false)
     const handlePayment = () => {
         notification.success({
@@ -96,6 +110,38 @@ const PaymentPage = () => {
 
     }
 
+    const [total, setTotal] = useState({ subtotal: 0, discount: 0, voucher: 0, total: 0 })
+
+    const getTotal = () => {
+        const subtotal = cart.reduce((total, item) => total + item.itemId.price * item.quantity, 0)
+        const discount = 10000
+        const voucher = 20000
+        const total = subtotal - discount - voucher
+
+        setTotal({
+            subtotal: subtotal,
+            discount: discount,
+            voucher: voucher,
+            total: total
+        })
+    }
+
+
+    const [invoice,setInvoice] = useState("")
+    console.log(invoice)
+    const createInvoice = (date = new Date()) => {
+        const datePart = dayjs(date).format("DDMMYYYY");
+
+        const randomPart = Math.random()
+            .toString(36)
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "")
+            .slice(2, 6);
+
+        setInvoice(`INVO-${datePart}-${randomPart}`)
+    };
+
+
 
     return (
         <div className="payment-page">
@@ -108,9 +154,19 @@ const PaymentPage = () => {
             {/* Summary */}
             <section className="summary">
                 <div className="no-invoice">
-                    <span>Invoice : O-120626-BMIKHJ </span>
+                    <span>Invoice : {invoice} </span>
                 </div>
                 <h3>Ringkasan</h3>
+                <div className="summary-items">
+                    {dataCart.map((item) => (
+                        <div className="summary-item" key={item.id}>
+                            <span>{item.itemId.nama}</span>
+                            <span>{item.quantity}x</span>
+                            <span>Rp. {item.itemId.price}</span>
+                            <span>Rp. {(item.quantity * item.itemId.price)}</span>
+                        </div>
+                    ))}
+                </div>
                 <div className="summary-row">
                     <span>Pembayaran menggunakan</span>
                     <span>
@@ -120,27 +176,27 @@ const PaymentPage = () => {
 
                 <div className="summary-row">
                     <span>Subtotal Belanja</span>
-                    <span>Rp 41.400</span>
+                    <span>{(total.subtotal).toLocaleString("id-ID")}</span>
                 </div>
 
                 <div className="summary-row discount">
-                    <span>Diskon</span>
-                    <span>-Rp 13.800</span>
+                    <span>Discount</span>
+                    <span>{(- total.discount).toLocaleString("id-ID")}</span>
                 </div>
 
                 <div className="summary-row">
                     <span>Voucher</span>
-                    <span>Rp 0</span>
+                    <span>{(total.voucher).toLocaleString("id-ID")}</span>
                 </div>
 
                 <div className="summary-row">
                     <span>Biaya Layanan</span>
-                    <span>Rp 0</span>
+                    <span>0</span>
                 </div>
 
                 <div className="summary-row boldd">
                     <span>Total Pembayaran</span>
-                    <span>Rp 21.666</span>
+                    <span>{(total.total).toLocaleString("id-ID")}</span>
                 </div>
 
                 <hr />
@@ -196,7 +252,7 @@ const PaymentPage = () => {
             <footer className="payment-footer">
                 <div className="total-payment">
                     <h4>Total Pembayaran</h4>
-                    <span>Rp 21.666</span>
+                    <span>Rp {(total.total).toLocaleString("id-ID")}</span>
                 </div>
                 <button
                     className="pay-button"

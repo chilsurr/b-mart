@@ -8,6 +8,8 @@ import waiting from "../assets/waiting-box.png"
 import pickUp from "../assets/package.png"
 import done from "../assets/received.png"
 
+import "../style/profile.css"
+
 function Profile() {
 
 

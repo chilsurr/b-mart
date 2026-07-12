@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import Arrow from "../assets/arrow.png"
 import Send from "../assets/send.png"
 import { useState, useRef, useEffect } from "react"
+import "../style/chat.css"
 
 
 function Chat() {

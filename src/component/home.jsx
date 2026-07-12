@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { animateToCart } from "../utils/addcartanimation";
 import dataItems from "../utils/dataproduct";
 import MyCard from "../utils/mycard";
+import "../style/home.css"
 
 import Message from "../assets/messenger.png"
 import Cart from "../assets/cart.png"
@@ -64,12 +65,19 @@ function Home() {
             const newOpacity = Math.min(scrollY / 40, 1);
             console.log(newOpacity)
             setOpacity(newOpacity);
+            console.log(isSticky)
+            console.log(scrollY)
         };
-        // console.log(isSticky)
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    useEffect(() => {
+        console.log("====================================================================")
+        console.log("isSticky:", isSticky);
+        console.log("====================================================================")
+    }, [isSticky]);
 
     const handleSearchFocus = () => {
         navigate("/search/")
@@ -82,7 +90,7 @@ function Home() {
 
     const handleCategory = (param) => {
         console.log(param)
-        navigate("/search/" , {state: {param} })
+        navigate("/search/", { state: { param } })
     }
 
     const categories = Object.values(
@@ -165,7 +173,7 @@ function Home() {
                     <div className="card-category">
                         {categories.map((item) => (
                             <Card
-                                onClick={()=> handleCategory(item.category)}
+                                onClick={() => handleCategory(item.category)}
                                 hoverable
                                 style={{ width: 85, height: 135, marginBottom: 15 }}
                                 cover={
@@ -180,125 +188,6 @@ function Home() {
                                 <span>{item.category}</span>
                             </Card>
                         ))}
-                        {/* <Card
-                            hoverable
-                            style={{ width: 85, height: 135, marginBottom: 15 }}
-                            cover={
-                                <img
-                                    style={{ height: 85 }}
-                                    draggable={false}
-                                    alt="example"
-                                    src={imgCat1}
-                                />
-                            }
-                        >
-                            <span>Makanan</span>
-                        </Card>
-
-                        <Card
-                            hoverable
-                            style={{ width: 85, height: 135, marginBottom: 15 }}
-                            cover={
-                                <img
-                                    style={{ height: 85 }}
-                                    draggable={false}
-                                    alt="example"
-                                    src={imgCat2}
-                                />
-                            }
-                        >
-                            <span>Minuman</span>
-                        </Card>
-
-                        <Card
-                            hoverable
-                            style={{ width: 85, height: 135, marginBottom: 15 }}
-                            cover={
-                                <img
-                                    style={{ height: 85 }}
-                                    draggable={false}
-                                    alt="example"
-                                    src={imgCat3}
-                                />
-                            }
-                        >
-                            <span>Perawatan Rumah</span>
-                        </Card>
-
-                        <Card
-                            hoverable
-                            style={{ width: 85, height: 135, marginBottom: 15 }}
-                            cover={
-                                <img
-                                    style={{ height: 85 }}
-                                    draggable={false}
-                                    alt="example"
-                                    src={imgCat4}
-                                />
-                            }
-                        >
-                            <span>Kecantikan</span>
-                        </Card>
-
-                        <Card
-                            hoverable
-                            style={{ width: 85, height: 135, marginBottom: 15 }}
-                            cover={
-                                <img
-                                    style={{ height: 85 }}
-                                    draggable={false}
-                                    alt="example"
-                                    src={imgCat1}
-                                />
-                            }
-                        >
-                            <span>Makanan</span>
-                        </Card>
-
-                        <Card
-                            hoverable
-                            style={{ width: 85, height: 135, marginBottom: 15 }}
-                            cover={
-                                <img
-                                    style={{ height: 85 }}
-                                    draggable={false}
-                                    alt="example"
-                                    src={imgCat2}
-                                />
-                            }
-                        >
-                            <span>Minuman</span>
-                        </Card>
-
-                        <Card
-                            hoverable
-                            style={{ width: 85, height: 135, marginBottom: 15 }}
-                            cover={
-                                <img
-                                    style={{ height: 85 }}
-                                    draggable={false}
-                                    alt="example"
-                                    src={imgCat3}
-                                />
-                            }
-                        >
-                            <span>Perawatan Rumah</span>
-                        </Card>
-
-                        <Card
-                            hoverable
-                            style={{ width: 85, height: 135, marginBottom: 15 }}
-                            cover={
-                                <img
-                                    style={{ height: 85 }}
-                                    draggable={false}
-                                    alt="example"
-                                    src={imgCat4}
-                                />
-                            }
-                        >
-                            <span>Kecantikan</span>
-                        </Card> */}
                     </div>
                 </div>
                 <div className="makanan grouping">

@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useRef, useState } from "react"
+import "../style/detail.css"
 
 import Message from "../assets/messenger.png"
 import Cart from "../assets/cart.png"

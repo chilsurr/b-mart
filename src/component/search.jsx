@@ -1,5 +1,6 @@
 import { Input, Empty } from "antd";
 import { Outlet, useNavigate,useLocation } from "react-router-dom";
+import "../style/search.css"
 
 import Arrow from "../assets/arrow.png"
 import Cart from "../assets/cart.png"

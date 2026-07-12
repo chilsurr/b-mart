@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom"
 import RegistLogo from "../src/assets/b-mart logo.png"
 
+import "./style/login&regist.css"
+
 function ResigtPage() {
     return (
         

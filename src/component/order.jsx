@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom"
 import { Collapse } from "antd";
-
+import "../style/order.css"
 
 import invoice from "../assets/invoice.png"
 import Arrow from "../assets/arrow.png"
