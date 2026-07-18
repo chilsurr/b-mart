@@ -77,7 +77,7 @@ function Cart() {
             okText: "Ya, Hapus",
             cancelText: "Batal",
             centered: true,
-            width: "90vw",
+            // width: "90vw",
 
             okButtonProps: {
                 className: "cart-delete-btn",
@@ -111,11 +111,11 @@ function Cart() {
     };
 
 
-    const getTotalCart =  () => cart.reduce(
+    const getTotalCart = () => cart.reduce(
         (total, item) => total + item.itemId.price * item.quantity, 0
     )
 
-    const goPayment = () => navigate("/payment/",{state :{cart}})
+    const goPayment = () => navigate("/payment/", { state: { cart } })
 
     return (
         <>
@@ -149,10 +149,12 @@ function Cart() {
                     ))}
                 </div>
                 <div className="footer-bar">
-                    <Checkbox className="check-all" indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
-                        Check all
-                    </Checkbox>
-                    <div className="total-price">Rp. {getTotalCart().toLocaleString("id-ID")}</div>
+                    <div className="checkout-section">
+                        <Checkbox className="check-all" indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+                            Check all
+                        </Checkbox>
+                        <div className="total-price">Rp. {getTotalCart().toLocaleString("id-ID")}</div>
+                    </div>
                     <Button className="btn-payment" onClick={goPayment}>Payment</Button>
                 </div>
 

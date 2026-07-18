@@ -15,10 +15,13 @@ const MyCard = ({
     return (
         <Card
             hoverable
-            style={{ width: 120, flexShrink: 0 }}
+            style={{ flexShrink: 0 }}
+            className="product-card"
+            // style={{ width: 120, flexShrink: 0 }}
             cover={
                 <img
-                    style={{ height: 120 }}
+                    // style={{ height: 120 }}
+                    className="product-card-img"
                     draggable={false}
                     alt={item.nama}
                     src={item.img}

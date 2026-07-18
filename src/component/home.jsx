@@ -73,11 +73,6 @@ function Home() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    useEffect(() => {
-        console.log("====================================================================")
-        console.log("isSticky:", isSticky);
-        console.log("====================================================================")
-    }, [isSticky]);
 
     const handleSearchFocus = () => {
         navigate("/search/")
@@ -144,11 +139,34 @@ function Home() {
                             </>
                         )}
                     </div>
-                    <div className="brand">B-mart</div>
+                    <div className="header-top">
+                        <div className="brand">B-mart</div>
+
+                        <div className="search-bar">
+                            <Input
+                                type="text"
+                                placeholder="Search item"
+                                className="search-input"
+                                onFocus={handleSearchFocus}
+                            />
+                            {/* <img className="icon" src={Search} alt="" /> */}
+                        </div>
+
+                        {/* <div className="nav-icon">
+                            <img className="icon" src={Message} alt="" onClick={chat} />
+
+                            <div ref={cartRef}>
+                                <img className="icon" src={Cart} alt="" onClick={cart} />
+                            </div>
+
+                            <img className="icon" src={Profile} alt="" onClick={profile} />
+                        </div> */}
+                    </div>
+                    {/* <div className="brand">B-mart</div>
                     <div className="search-bar">
                         <Input type="text" placeholder="Search item" className="search-input" onFocus={handleSearchFocus} />
                         <img className="icon" src={Search} alt="" />
-                    </div>
+                    </div> */}
 
                     <div className="carousel">
                         <Carousel autoplay>
@@ -168,99 +186,118 @@ function Home() {
 
                     </div>
                 </div>
-                <div className="category">
-                    <h3>Kategory</h3>
-                    <div className="card-category">
-                        {categories.map((item) => (
-                            <Card
-                                onClick={() => handleCategory(item.category)}
-                                hoverable
-                                style={{ width: 85, height: 135, marginBottom: 15 }}
-                                cover={
-                                    <img
-                                        style={{ height: 85 }}
-                                        draggable={false}
-                                        alt="example"
-                                        src={item.img}
+                <section className="section-body">
+                    <div className="category">
+                        <h3>Kategory</h3>
+                        <div className="card-category">
+                            {categories.map((item) => (
+                                <Card
+                                    onClick={() => handleCategory(item.category)}
+                                    hoverable
+                                    style={{ width: 85, height: 135, marginBottom: 15 }}
+                                    cover={
+                                        <img
+                                            style={{ height: 85 }}
+                                            draggable={false}
+                                            alt="example"
+                                            src={item.img}
+                                        />
+                                    }
+                                >
+                                    <span>{item.category}</span>
+                                </Card>
+                            ))}
+                            {categories.map((item) => (
+                                <Card
+                                    onClick={() => handleCategory(item.category)}
+                                    hoverable
+                                    style={{ width: 85, height: 135, marginBottom: 15 }}
+                                    cover={
+                                        <img
+                                            style={{ height: 85 }}
+                                            draggable={false}
+                                            alt="example"
+                                            src={item.img}
+                                        />
+                                    }
+                                >
+                                    <span>{item.category}</span>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="makanan grouping">
+                        <h3>Makanan</h3>
+                        <div className="card">
+                            {dataItems
+                                .filter((item) => item.category === "Makanan")
+                                .map((item) => (
+                                    <MyCard
+                                        key={item.id}
+                                        item={item}
+                                        cartRef={cartRef}
+                                        imageRefs={imageRefs}
+                                        animateToCart={animateToCart}
+                                        detail={detail}
                                     />
-                                }
-                            >
-                                <span>{item.category}</span>
-                            </Card>
-                        ))}
-                    </div>
-                </div>
-                <div className="makanan grouping">
-                    <h3>Makanan</h3>
-                    <div className="card">
-                        {dataItems
-                            .filter((item) => item.category === "Makanan")
-                            .map((item) => (
-                                <MyCard
-                                    key={item.id}
-                                    item={item}
-                                    cartRef={cartRef}
-                                    imageRefs={imageRefs}
-                                    animateToCart={animateToCart}
-                                    detail={detail}
-                                />
-                            ))}
+                                ))}
 
+                        </div>
                     </div>
-                </div>
 
-                <div className="minuman grouping">
-                    <h3>Minuman</h3>
-                    <div className="card">
-                        {dataItems
-                            .filter((item) => item.category === "Minuman")
-                            .map((item) => (
-                                <MyCard
-                                    key={item.id}
-                                    item={item}
-                                    cartRef={cartRef}
-                                    imageRefs={imageRefs}
-                                    animateToCart={animateToCart}
-                                    detail={detail}
-                                />
-                            ))}
+                    <div className="minuman grouping">
+                        <h3>Minuman</h3>
+                        <div className="card">
+                            {dataItems
+                                .filter((item) => item.category === "Minuman")
+                                .map((item) => (
+                                    <MyCard
+                                        key={item.id}
+                                        item={item}
+                                        cartRef={cartRef}
+                                        imageRefs={imageRefs}
+                                        animateToCart={animateToCart}
+                                        detail={detail}
+                                    />
+                                ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="kebutuhan-rumah grouping">
-                    <h3>Perawatan Rumah</h3>
-                    <div className="card">
-                        {dataItems
-                            .filter((item) => item.category === "Perawatan Rumah")
-                            .map((item) => (
-                                <MyCard
-                                    key={item.id}
-                                    item={item}
-                                    cartRef={cartRef}
-                                    imageRefs={imageRefs}
-                                    animateToCart={animateToCart}
-                                    detail={detail}
-                                />
-                            ))}
+                    <div className="kebutuhan-rumah grouping">
+                        <h3>Perawatan Rumah</h3>
+                        <div className="card">
+                            {dataItems
+                                .filter((item) => item.category === "Perawatan Rumah")
+                                .map((item) => (
+                                    <MyCard
+                                        key={item.id}
+                                        item={item}
+                                        cartRef={cartRef}
+                                        imageRefs={imageRefs}
+                                        animateToCart={animateToCart}
+                                        detail={detail}
+                                    />
+                                ))}
+                        </div>
                     </div>
-                </div>
-                <div className="kecantikan grouping">
-                    <h3>Kecantikan</h3>
-                    <div className="card">
-                        {dataItems
-                            .filter((item) => item.category === "Kecantikan")
-                            .map((item) => (
-                                <MyCard
-                                    key={item.id}
-                                    item={item}
-                                    cartRef={cartRef}
-                                    imageRefs={imageRefs}
-                                    animateToCart={animateToCart}
-                                    detail={detail}
-                                />
-                            ))}
+                    <div className="kecantikan grouping">
+                        <h3>Kecantikan</h3>
+                        <div className="card">
+                            {dataItems
+                                .filter((item) => item.category === "Kecantikan")
+                                .map((item) => (
+                                    <MyCard
+                                        key={item.id}
+                                        item={item}
+                                        cartRef={cartRef}
+                                        imageRefs={imageRefs}
+                                        animateToCart={animateToCart}
+                                        detail={detail}
+                                    />
+                                ))}
+                        </div>
                     </div>
-                </div>
+                </section >
             </div >
 
 

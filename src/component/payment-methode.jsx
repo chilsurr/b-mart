@@ -127,7 +127,7 @@ const PaymentPage = () => {
     }
 
 
-    const [invoice,setInvoice] = useState("")
+    const [invoice, setInvoice] = useState("")
     console.log(invoice)
     const createInvoice = (date = new Date()) => {
         const datePart = dayjs(date).format("DDMMYYYY");
@@ -151,102 +151,105 @@ const PaymentPage = () => {
                 <div>Payment</div>
             </header>
 
-            {/* Summary */}
-            <section className="summary">
-                <div className="no-invoice">
-                    <span>Invoice : {invoice} </span>
-                </div>
-                <h3>Ringkasan</h3>
-                <div className="summary-items">
-                    {dataCart.map((item) => (
-                        <div className="summary-item" key={item.id}>
-                            <span>{item.itemId.nama}</span>
-                            <span>{item.quantity}x</span>
-                            <span>Rp. {item.itemId.price}</span>
-                            <span>Rp. {(item.quantity * item.itemId.price)}</span>
-                        </div>
-                    ))}
-                </div>
-                <div className="summary-row">
-                    <span>Pembayaran menggunakan</span>
-                    <span>
-                        {selectedPayment || "-"}
-                    </span>
-                </div>
-
-                <div className="summary-row">
-                    <span>Subtotal Belanja</span>
-                    <span>{(total.subtotal).toLocaleString("id-ID")}</span>
-                </div>
-
-                <div className="summary-row discount">
-                    <span>Discount</span>
-                    <span>{(- total.discount).toLocaleString("id-ID")}</span>
-                </div>
-
-                <div className="summary-row">
-                    <span>Voucher</span>
-                    <span>{(total.voucher).toLocaleString("id-ID")}</span>
-                </div>
-
-                <div className="summary-row">
-                    <span>Biaya Layanan</span>
-                    <span>0</span>
-                </div>
-
-                <div className="summary-row boldd">
-                    <span>Total Pembayaran</span>
-                    <span>{(total.total).toLocaleString("id-ID")}</span>
-                </div>
-
-                <hr />
-
-            </section>
-
-            {/* Payment Methods */}
-            <section className="payment-methods">
-                <ConfigProvider
-                    theme={{
-                        components: {
-                            Radio: {
-                                colorPrimary: "#2E7D32",
-                                colorPrimaryHover: "#2E7D32",
-                            },
-                        },
-                    }}
-                >
-                    <Radio.Group
-                        value={selectedPayment}
-                        onChange={(e) =>
-                            setSelectedPayment(e.target.value)
-                        }
-                        style={{ width: "100%" }}
-                    >
-                        {paymentMethods.map((method) => (
-                            <div
-                                key={method.id}
-                                className="payment-item"
-                            >
-                                <div className="payment-left">
-                                    <Avatar
-                                        src={method.icon}
-                                        size={40}
-                                        shape="circle"
-                                    />
-
-                                    <div className="payment-info">
-                                        <div className="payment-name">
-                                            {method.name}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <Radio value={method.name} className="payment-radio" />
+            <div className="payment-body">
+                {/* Summary */}
+                <section className="summary">
+                    <div className="no-invoice">
+                        <span>Invoice : {invoice} </span>
+                    </div>
+                    <h3>Ringkasan</h3>
+                    <div className="summary-items">
+                        {dataCart.map((item) => (
+                            <div className="summary-item" key={item.id}>
+                                <span>{item.itemId.nama}</span>
+                                <span>{item.quantity}x</span>
+                                <span>Rp. {item.itemId.price}</span>
+                                <span>Rp. {(item.quantity * item.itemId.price)}</span>
                             </div>
                         ))}
-                    </Radio.Group>
-                </ConfigProvider>
-            </section>
+                    </div>
+                    <div className="summary-row">
+                        <span>Pembayaran menggunakan</span>
+                        <span>
+                            {selectedPayment || "-"}
+                        </span>
+                    </div>
+
+                    <div className="summary-row">
+                        <span>Subtotal Belanja</span>
+                        <span>{(total.subtotal).toLocaleString("id-ID")}</span>
+                    </div>
+
+                    <div className="summary-row discount">
+                        <span>Discount</span>
+                        <span>{(- total.discount).toLocaleString("id-ID")}</span>
+                    </div>
+
+                    <div className="summary-row">
+                        <span>Voucher</span>
+                        <span>{(total.voucher).toLocaleString("id-ID")}</span>
+                    </div>
+
+                    <div className="summary-row">
+                        <span>Biaya Layanan</span>
+                        <span>0</span>
+                    </div>
+
+                    <div className="summary-row boldd">
+                        <span>Total Pembayaran</span>
+                        <span>{(total.total).toLocaleString("id-ID")}</span>
+                    </div>
+
+                    <hr />
+
+                </section>
+
+                {/* Payment Methods */}
+                <section className="payment-methods">
+                    <ConfigProvider
+                        theme={{
+                            components: {
+                                Radio: {
+                                    colorPrimary: "#2E7D32",
+                                    colorPrimaryHover: "#2E7D32",
+                                },
+                            },
+                        }}
+                    >
+                        <Radio.Group
+                            value={selectedPayment}
+                            onChange={(e) =>
+                                setSelectedPayment(e.target.value)
+                            }
+                            style={{ width: "100%" }}
+                        >
+                            {paymentMethods.map((method) => (
+                                <div
+                                    key={method.id}
+                                    className="payment-item"
+                                >
+                                    <div className="payment-left">
+                                        <Avatar
+                                            src={method.icon}
+                                            size={40}
+                                            shape="circle"
+                                        />
+
+                                        <div className="payment-info">
+                                            <div className="payment-name">
+                                                {method.name}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Radio value={method.name} className="payment-radio" />
+                                </div>
+                            ))}
+                        </Radio.Group>
+                    </ConfigProvider>
+                </section>
+            </div>
+
 
             {/* Footer */}
             <footer className="payment-footer">
