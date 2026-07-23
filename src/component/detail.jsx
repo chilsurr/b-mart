@@ -38,42 +38,48 @@ export default function ProductDetail() {
             <div className="detail-header">
                 <img className="icon" src={Arrow} onClick={back} />
                 <div>
-                    <img className="icon" src={Message} alt="" onClick={chat}/>
+                    <img className="icon" src={Message} alt="" onClick={chat} />
                     <img className="icon" src={Cart} alt="" ref={cartRef} onClick={cart} />
                 </div>
             </div>
-            {dataDetail.map((item) => (
-                <div className="detail-body" key={item.id}>
-                    <div className="cover-img">
-                        <img className="product-image" src={item.img} alt="" ref={productImageRef} />
-                    </div>
+            <div className="detail-content">
+                {dataDetail.map((item) => (
+                    <div className="detail-body" key={item.id}>
+                        <div className="detail-image">
+                            <div className="cover-img">
+                                <img className="product-image" src={item.img} alt="" ref={productImageRef} />
+                            </div>
+                        </div>
+                        <div className="detail-product">
+                            <div className="product-info">
+                                <div>{item.nama}</div>
+                                <div>{item.price}</div>
+                            </div>
 
-                    <div className="product-info">
-                        <div>{item.nama}</div>
-                        <div>{item.price}</div>
-                    </div>
+                            <div className="description">
+                                <div><b>Deskripsi</b></div>
+                                <div>
+                                    {item.deskripsi}
+                                </div>
+                            </div>
 
-                    <div className="description">
-                        <div><b>Deskripsi</b></div>
-                        <div>
-                            {item.deskripsi}
+                            <div className="footer-detail">
+                                <button className="add-cart-detail-btn"
+                                    onClick={() =>
+                                        animateToCart({
+                                            imageElement: productImageRef.current,
+                                            cartElement: cartRef.current,
+                                            // onComplete: () =>
+                                            //     setCartCount((prev) => prev + 1),
+                                        }, console.log(productImageRef))
+                                    }
+                                >Add Cart</button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            ))}
+                ))}
 
-            <div className="footer-detail">
-                <button className="add-cart-detail-btn"
-                    onClick={() =>
-                        animateToCart({
-                            imageElement: productImageRef.current,
-                            cartElement: cartRef.current,
-                            // onComplete: () =>
-                            //     setCartCount((prev) => prev + 1),
-                        }, console.log(productImageRef))
-                    }
-                >Add Cart</button>
             </div>
         </div>
     );

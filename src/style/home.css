@@ -135,7 +135,7 @@
   .card {
     display: flex;
     overflow-y: auto;
-    gap: 14px;
+    gap: 20px;
     margin-top: 15px;
     height: 300px;
     -ms-overflow-style: none;
