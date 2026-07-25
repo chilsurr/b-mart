@@ -6,6 +6,24 @@ import dataItems from "../utils/dataproduct";
 import MyCard from "../utils/mycard";
 import "../style/home.css"
 
+
+import {
+    Modal,
+    List,
+    Avatar,
+    Badge,
+    Dropdown,
+    Empty
+} from "antd";
+
+
+import Send from "../assets/send.png"
+// import { useState, useRef, useEffect } from "react"
+// import "../style/chat.css"
+
+
+
+
 import Message from "../assets/messenger.png"
 import Cart from "../assets/cart.png"
 import Search from "../assets/search.png"
@@ -98,6 +116,148 @@ function Home() {
     )
     console.log(categories)
 
+
+    const [open, setOpen] = useState(false);
+    const showModal = () => {
+        setOpen(true)
+        // if (open && chatBodyRef.current) {
+        //     chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+        // }
+        // const chat = chatBodyRef.current;
+
+        // if (chat) {
+        //     chat.scrollTop = chat.scrollHeight;
+        // }
+    }
+
+
+    const messages = [
+        {
+            id: 1,
+            side: "left",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 2,
+            side: "right",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 3,
+            side: "left",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 4,
+            side: "right",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 5,
+            side: "left",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 6,
+            side: "right",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 7,
+            side: "right",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 8,
+            side: "left",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 9,
+            side: "right",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 10,
+            side: "right",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 11,
+            side: "right",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 12,
+            side: "left",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 13,
+            side: "right",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+        {
+            id: 14,
+            side: "left",
+            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+        },
+    ];
+
+    const inputRef = useRef(null);
+    const [text, setText] = useState("")
+
+    const [dataRender, setDataRender] = useState(messages)
+
+    function handleSend() {
+        const message = text.trim();
+
+        if (!message) {
+            inputRef.current?.focus();
+            return;
+        }
+
+        const dumy = {
+            id: dataRender.length + 1,
+            side: "right",
+            text: message
+        }
+
+        setDataRender([...dataRender, dumy])
+        setText("")
+        inputRef.current?.focus();
+    }
+
+
+
+    const chatBodyRef = useRef(null)
+    // useEffect(() => {
+    //     if (open && chatBodyRef.current) {
+    //         chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    //     }
+    // }, [open, messages]);
+    // useEffect(() => {
+    //     const chat = chatBodyRef.current;
+
+    //     if (chat) {
+    //         chat.scrollTop = chat.scrollHeight;
+    //     }
+    // }, [dataRender])
+
+    useEffect(() => {
+        const chat = chatBodyRef.current;
+
+        if (chat) {
+            chat.scrollTo({
+                top: chat.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    }, [dataRender]);
+
+
+
+
     return (
         <>
             <div className="container">
@@ -111,7 +271,8 @@ function Home() {
                             <>
                                 <div className="navbar">
                                     <div className="nav-icon">
-                                        <img className="icon" src={Message} alt="" onClick={chat} />
+                                        <img className="icon message-mobile" src={Message} alt="" onClick={chat} />
+                                        <img className="icon message-desktop" src={Message} alt="" onClick={showModal} />
                                         <div ref={cartRef}>
                                             <img className="icon" src={Cart} alt="" onClick={cart} />
                                         </div>
@@ -192,6 +353,7 @@ function Home() {
                         <div className="card-category">
                             {categories.map((item) => (
                                 <Card
+                                    key={item.id}
                                     onClick={() => handleCategory(item.category)}
                                     hoverable
                                     style={{ width: 85, height: 135, marginBottom: 15 }}
@@ -209,6 +371,7 @@ function Home() {
                             ))}
                             {categories.map((item) => (
                                 <Card
+                                    key={item.id}
                                     onClick={() => handleCategory(item.category)}
                                     hoverable
                                     style={{ width: 85, height: 135, marginBottom: 15 }}
@@ -299,6 +462,81 @@ function Home() {
                     </div>
                 </section >
             </div >
+
+
+            <Modal
+                open={open}
+                afterOpenChange={(visible) => {
+                    if (visible && chatBodyRef.current) {
+                        chatBodyRef.current.scrollTop =
+                            chatBodyRef.current.scrollHeight;
+                    }
+                }}
+                // setOpen={setOpen}
+                footer={null}
+                closable={false}
+                width={540}
+                styles={{
+                    body: {
+                        overflow: "hidden",
+                        padding: 0,
+                        height: 450,
+                    },
+                }}
+            >
+                <div className="chat-wrapper">
+
+                    {/* Header */}
+                    <div className="chat-header-home">
+                        <div className="chat-title">
+                            Chat <span>(2)</span>
+                        </div>
+
+                        <div className="chat-actions">
+                            <Button type="text" onClick={() => setOpen(false)}>X</Button>
+                        </div>
+                    </div>
+
+                    {/* Body */}
+                    <div className="chat-body-home">
+
+                        <main className="chat-body" ref={chatBodyRef}>
+                            {(dataRender.length > 0 ? dataRender : messages).map((msg) => (
+                                <div
+                                    key={msg.id}
+                                    className={`chat-bubble ${msg.side === "left" ? "left" : "right"}`}
+                                >
+                                    {msg.text}
+                                </div>
+                            ))}
+                        </main>
+
+
+                    </div>
+                    <footer className="chat-footer">
+                        <button className="chat-add">＋</button>
+
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            placeholder="Tulis Pesan..."
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSend();
+                                }
+                            }}
+                            className="chat-input"
+                        />
+
+                        <button className="chat-send" onClick={handleSend}>
+                            <img src={Send} alt="" />
+                        </button>
+                    </footer>
+
+                </div>
+            </Modal>
 
 
             {/* <AnimatePresence>
