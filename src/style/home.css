@@ -183,7 +183,7 @@
 
 
 .product-title {
-  font-size: 16px;
+  /* font-size: 16px; */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   /* Jumlah baris maksimal */
@@ -465,6 +465,11 @@
     margin-left: -70px;
     padding: 4px 8px;
     box-sizing: border-box;
+    z-index: 1001;
+  }
+
+  .search-bar .hide-input{
+    z-index: 1;
   }
 
   .nav-icon {

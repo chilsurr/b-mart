@@ -1,5 +1,5 @@
 import { Input, Empty } from "antd";
-import { Outlet, useNavigate,useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import "../style/search.css"
 
 import Arrow from "../assets/arrow.png"
@@ -61,10 +61,18 @@ function Search() {
     const location = useLocation();
     const searchCategory = location.state?.param || "";
 
+
+    const { state } = useLocation();
+    console.log(state)
     useEffect(() => (
+        setSearch(state.param),
         setCategory(searchCategory),
         setDataProducts(dataItems)
-    ),[])
+    ), [])
+
+    // const { state } = useLocation();
+    // console.log(state)
+
 
     const navigate = useNavigate()
     function back() {

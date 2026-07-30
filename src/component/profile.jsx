@@ -30,6 +30,20 @@ function Profile() {
         </label>
     );
 
+    const tabsProfile = [
+        { value: "Profile" },
+        { value: "Alamat" },
+        { value: "Ubah Kata Sandi" },
+        { value: "Language" },
+        { value: "Dark Mode" },
+    ];
+
+    const tabsOrder = [
+        { value: "On Process" },
+        { value: "Need Pick-up" },
+        { value: "Done" },
+    ];
+    
     return (
         <>
             <div className="profile">
@@ -74,7 +88,7 @@ function Profile() {
                         {/* Menu */}
                         <div className="menu-sider menu-sider-active">
                             <span>Profile</span>
-                        </div> 
+                        </div>
 
                         <div className="menu-sider">
                             <span>Order</span>
@@ -92,7 +106,6 @@ function Profile() {
 
                         {/* Card */}
                         <section className="profile-content-card">
-                            {/* Left */}
                             <div className="photo-section">
                                 <div className="border-profile-photo">
                                     <img
@@ -104,9 +117,7 @@ function Profile() {
                                 <button>Pilih Foto</button>
                             </div>
 
-                            {/* Right */}
                             <div className="info-section">
-                                {/* Biodata */}
                                 <section>
                                     <div className="info-row">
                                         <label>Nama</label>

@@ -76,13 +76,16 @@ function Home() {
 
     const [isSticky, setIsSticky] = useState(false);
     const [opacity, setOpacity] = useState(0);
+    const [isHideInput, setIsHideInput] = useState(false)
 
     useEffect(() => {
         const handleScroll = () => {
             setIsSticky(window.scrollY > 40);
+            setIsHideInput(window.scrollY > 1)
             const newOpacity = Math.min(scrollY / 40, 1);
-            console.log(newOpacity)
+            // console.log(newOpacity)
             setOpacity(newOpacity);
+            console.log(isHideInput)
             console.log(isSticky)
             console.log(scrollY)
         };
@@ -91,9 +94,10 @@ function Home() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-
-    const handleSearchFocus = () => {
-        navigate("/search/")
+    const [searchValue, setSearchValue] = useState("")
+    const handleSearchFocus = (param) => {
+        console.log(param)
+        navigate("/search/", {state : {param}})
     }
 
     const resultCategory = (category) => {
@@ -114,7 +118,6 @@ function Home() {
             return acc
         }, {})
     )
-    console.log(categories)
 
 
     const [open, setOpen] = useState(false);
@@ -286,7 +289,7 @@ function Home() {
                                     type="text"
                                     placeholder="Search item"
                                     className={`search-navbar ${isSticky ? "show" : ""}`}
-                                    onFocus={handleSearchFocus}
+                                // onFocus={handleSearchFocus}
                                 />
 
                                 <div className="nav-icon">
@@ -307,8 +310,14 @@ function Home() {
                             <Input
                                 type="text"
                                 placeholder="Search item"
-                                className="search-input"
-                                onFocus={handleSearchFocus}
+                                className={`search-input ${isHideInput ? 'hide-input' : ""}`}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        console.log("diteken")
+                                        handleSearchFocus(searchValue)
+                                    }
+                                }}
                             />
                             {/* <img className="icon" src={Search} alt="" /> */}
                         </div>
@@ -329,7 +338,7 @@ function Home() {
                         <img className="icon" src={Search} alt="" />
                     </div> */}
 
-                    <div className="carousel">
+                    <div className="carousel" >
                         <Carousel autoplay>
                             <div >
                                 <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>

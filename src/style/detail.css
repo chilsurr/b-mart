@@ -145,6 +145,12 @@
     background: #e0e0e0;
   }
 
+  .detail-product {
+    padding: 10px;
+    background-color: #fff;
+    color: #000;
+  }
+
   .description {
     background: #e0e0e0;
     padding: 10px;
