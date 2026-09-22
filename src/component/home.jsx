@@ -6,6 +6,8 @@ import dataItems from "../utils/dataproduct";
 import MyCard from "../utils/mycard";
 import "../style/home.css"
 
+import { getProduct } from "../utils/api";
+
 
 import {
     Modal,
@@ -52,6 +54,8 @@ function Home() {
     const imageRefs = useRef({});
     const cartRef = useRef(null);
 
+    const [items, setItems] = useState([])
+
     const [flyingItem, setFlyingItem] = useState(null);
     const [cartCount, setCartCount] = useState(0);
 
@@ -79,25 +83,31 @@ function Home() {
     const [isHideInput, setIsHideInput] = useState(false)
 
     useEffect(() => {
+        getProduct().then((result) => {
+            setItems(result)
+        })
+
         const handleScroll = () => {
             setIsSticky(window.scrollY > 40);
             setIsHideInput(window.scrollY > 1)
             const newOpacity = Math.min(scrollY / 40, 1);
             // console.log(newOpacity)
             setOpacity(newOpacity);
-            console.log(isHideInput)
-            console.log(isSticky)
-            console.log(scrollY)
         };
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+
+    useEffect(()=>{
+        console.log(JSON.stringify(items, null, 2))
+    })
+
     const [searchValue, setSearchValue] = useState("")
     const handleSearchFocus = (param) => {
         console.log(param)
-        navigate("/search/", {state : {param}})
+        navigate("/search/", { state: { param } })
     }
 
     const resultCategory = (category) => {
@@ -111,7 +121,7 @@ function Home() {
     }
 
     const categories = Object.values(
-        dataItems.reduce((acc, item) => {
+        items.reduce((acc, item) => {
             if (!acc[item.category]) {
                 acc[item.category] = item
             }
@@ -293,7 +303,8 @@ function Home() {
                                 />
 
                                 <div className="nav-icon">
-                                    <img className="icon" src={Message} alt="" onClick={chat} />
+                                    <img className="icon message-mobile" src={Message} alt="" onClick={chat} />
+                                    <img className="icon message-desktop" src={Message} alt="" onClick={showModal} />
                                     <div >
                                         <img className="icon" src={Cart} ref={cartRef} alt="" onClick={cart} />
                                     </div>
@@ -371,25 +382,7 @@ function Home() {
                                             style={{ height: 85 }}
                                             draggable={false}
                                             alt="example"
-                                            src={item.img}
-                                        />
-                                    }
-                                >
-                                    <span>{item.category}</span>
-                                </Card>
-                            ))}
-                            {categories.map((item) => (
-                                <Card
-                                    key={item.id}
-                                    onClick={() => handleCategory(item.category)}
-                                    hoverable
-                                    style={{ width: 85, height: 135, marginBottom: 15 }}
-                                    cover={
-                                        <img
-                                            style={{ height: 85 }}
-                                            draggable={false}
-                                            alt="example"
-                                            src={item.img}
+                                            src={imgCat1}
                                         />
                                     }
                                 >
@@ -401,7 +394,7 @@ function Home() {
                     <div className="makanan grouping">
                         <h3>Makanan</h3>
                         <div className="card">
-                            {dataItems
+                            {items
                                 .filter((item) => item.category === "Makanan")
                                 .map((item) => (
                                     <MyCard
@@ -420,7 +413,7 @@ function Home() {
                     <div className="minuman grouping">
                         <h3>Minuman</h3>
                         <div className="card">
-                            {dataItems
+                            {items
                                 .filter((item) => item.category === "Minuman")
                                 .map((item) => (
                                     <MyCard
@@ -436,10 +429,10 @@ function Home() {
                     </div>
 
                     <div className="kebutuhan-rumah grouping">
-                        <h3>Perawatan Rumah</h3>
+                        <h3>Kebutuhan Rumah</h3>
                         <div className="card">
-                            {dataItems
-                                .filter((item) => item.category === "Perawatan Rumah")
+                            {items
+                                .filter((item) => item.category === "Kebutuhan rumah")
                                 .map((item) => (
                                     <MyCard
                                         key={item.id}
@@ -455,7 +448,7 @@ function Home() {
                     <div className="kecantikan grouping">
                         <h3>Kecantikan</h3>
                         <div className="card">
-                            {dataItems
+                            {items
                                 .filter((item) => item.category === "Kecantikan")
                                 .map((item) => (
                                     <MyCard

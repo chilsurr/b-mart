@@ -1,4 +1,7 @@
 import { Card } from "antd";
+import imgCat1 from "../assets/img/category1.png"
+
+import { postCart } from "./api";
 
 import gsap from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
@@ -23,8 +26,8 @@ const MyCard = ({
                     // style={{ height: 120 }}
                     className="product-card-img"
                     draggable={false}
-                    alt={item.nama}
-                    src={item.img}
+                    alt={item.name}
+                    src={imgCat1}
                     ref={(el) => (imageRefs.current[item.id] = el)}
                 />
             }
@@ -32,7 +35,7 @@ const MyCard = ({
         >
             <div className="card-body" >
                 <div className="product-title">
-                    <span>{item.nama}</span>
+                    <span>{item.name}</span>
                 </div>
 
                 <div className="price">
@@ -46,6 +49,10 @@ const MyCard = ({
                         animateToCart({
                             imageElement: imageRefs.current[item.id],
                             cartElement: cartRef.current,
+                        })
+                        postCart({
+                            "product_id": item.id,
+                            "quantity": 1
                         })
                     }}
                 >
