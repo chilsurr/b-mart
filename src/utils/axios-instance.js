@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
   // }
   // ini ganggu ke upload dan create excel di bagian conten type
 });
-
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token");
@@ -21,6 +20,7 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+  
 
 
 export default axiosInstance

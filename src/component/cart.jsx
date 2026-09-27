@@ -3,6 +3,8 @@ import { useState } from "react"
 import Arrow from "../assets/arrow.png"
 import "../style/cart.css"
 
+import { getCart, updateCart,deleteCart } from "../utils/api"
+
 import dataItems from "../utils/dataproduct"
 import dataCart from "../utils/datacart"
 
@@ -12,6 +14,7 @@ import imgCat3 from "../assets/img/category3.png"
 import imgCat4 from "../assets/img/category4.png"
 
 import { Checkbox, Button, Modal } from 'antd';
+import { useEffect } from "react"
 const { confirm } = Modal;
 const CheckboxGroup = Checkbox.Group;
 
@@ -19,20 +22,16 @@ const CheckboxGroup = Checkbox.Group;
 
 function Cart() {
 
-    const idCart = 2
-    const dataCartdumy = dataCart.filter((items) => items.userId === idCart)
-    console.log(dataCartdumy)
+    useEffect(() => {
+        getCart().then((result) => {
+            console.log(result.data)
+            setCart(result.data)
+        })
 
-    const dataCartFix = dataCartdumy.map((item) => ({
-        ...item, itemId: dataItems.find((product) => product.id === item.itemId)
-    }))
+    },[])
 
-    console.log(dataCartFix)
 
-    // const peww = dataCartdumy.map((item)=> dataItems.find((product) => product.id === item.itemId))
-    // console.log(peww)
-
-    const [cart, setCart] = useState(dataCartFix);
+    const [cart, setCart] = useState([]);
 
 
     const navigate = useNavigate()
@@ -41,43 +40,60 @@ function Cart() {
     }
 
 
-    const tambah = (id) => {
-        setCart((prev) =>
-            prev.map((item) =>
-                item.id === id
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
-            )
-        );
+    const tambah = async (id) => {
+        const cartItem = cart.find((item) => item.id === id);
+        if (!cartItem) return;
+        const newQuantity = cartItem.quantity + 1;
+
+        try {
+            const updatedItem = await updateCart(id, newQuantity);
+
+            setCart((prev) =>
+                prev.map((item) =>
+                    item.id === id
+                        ? updatedItem.data
+                        : item
+                )
+            );
+        } catch (error) {
+            console.error("Gagal menambah quantity:", error);
+        }
     };
 
 
-    const kurang = (id) => {
+    const kurang = async (id) => {
         const cartItem = cart.find((item) => item.id === id);
 
         if (!cartItem) return;
 
         // quantity > 1 => kurangi
         if (cartItem.quantity > 1) {
-            setCart((prev) =>
-                prev.map((item) =>
-                    item.id === id
-                        ? { ...item, quantity: item.quantity - 1 }
-                        : item
-                )
-            );
+            const newQuantity = cartItem.quantity - 1;
+
+            try {
+                const updatedItem = await updateCart(id, newQuantity);
+
+                setCart((prev) =>
+                    prev.map((item) =>
+                        item.id === id
+                            ? updatedItem.data
+                            : item
+                    )
+                );
+            } catch (error) {
+                console.error("Gagal mengurangi quantity:", error);
+            }
 
             return;
         }
 
-        // quantity = 1 => tampilkan konfirmasi
+        // quantity = 1 => konfirmasi hapus
         confirm({
             title: "Hapus Produk",
             content: "Apakah Anda ingin menghapus item ini dari keranjang?",
             okText: "Ya, Hapus",
             cancelText: "Batal",
             centered: true,
-            // width: "90vw",
 
             okButtonProps: {
                 className: "cart-delete-btn",
@@ -87,10 +103,16 @@ function Cart() {
                 className: "cart-cancel-btn",
             },
 
-            onOk: () => {
-                setCart((prev) =>
-                    prev.filter((item) => item.id !== id)
-                );
+            onOk: async () => {
+                try {
+                    await deleteCart(id);
+
+                    setCart((prev) =>
+                        prev.filter((item) => item.id !== id)
+                    );
+                } catch (error) {
+                    console.error("Gagal menghapus cart:", error);
+                }
             },
         });
     };
@@ -112,7 +134,7 @@ function Cart() {
 
 
     const getTotalCart = () => cart.reduce(
-        (total, item) => total + item.itemId.price * item.quantity, 0
+        (total, item) => total + item.product.price * item.quantity, 0
     )
 
     const goPayment = () => navigate("/payment/", { state: { cart } })
@@ -131,10 +153,11 @@ function Cart() {
                                 checked={checkedList.includes(item.id)}
                                 onChange={() => onChange(item.id)}
                             />
-                            <img src={item.itemId.img} alt={item.itemId.name} width={80} />
+                            <img src={imgCat1} alt={item.product.name} width={80} />
+                            {/* <img src={item.product.img} alt={item.product.name} width={80} /> */}
                             <div className="cart-desc">
-                                <h3>{item.itemId.nama}</h3>
-                                <p>Rp. {item.itemId.price}</p>
+                                <h3>{item.product.name}</h3>
+                                <p>Rp. {item.product.price}</p>
                             </div>
                             <div className="qty-control">
                                 <button className="qty-btn" onClick={() => kurang(item.id)}>

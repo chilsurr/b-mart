@@ -10,7 +10,10 @@ export const animateToCart = ({
   cartElement,
   onComplete,
 }) => {
-  if (!imageElement || !cartElement) return;
+  if (!imageElement || !cartElement) {
+    onComplete?.();
+    return;
+  }
 
   const imgRect = imageElement.getBoundingClientRect();
   const cartRect = cartElement.getBoundingClientRect();
@@ -26,6 +29,8 @@ export const animateToCart = ({
     zIndex: "9999",
     pointerEvents: "none",
     borderRadius: "12px",
+    objectFit: "cover",
+    transition: "none",
   });
 
   document.body.appendChild(clone);
@@ -64,6 +69,7 @@ export const animateToCart = ({
       curviness: 1.5,
     },
     scale: 0.25,
+    opacity: 0.7,
     onComplete: () => {
       clone.remove();
 

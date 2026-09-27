@@ -6,7 +6,7 @@ import dataItems from "../utils/dataproduct";
 import MyCard from "../utils/mycard";
 import "../style/home.css"
 
-import { getProduct } from "../utils/api";
+import { getProduct, getCart, postCart } from "../utils/api";
 
 
 import {
@@ -43,7 +43,6 @@ import imgCat4 from "../assets/img/category4.png"
 // import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-import { object } from "framer-motion/client";
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -53,8 +52,10 @@ function Home() {
 
     const imageRefs = useRef({});
     const cartRef = useRef(null);
+    const stickyCartRef = useRef(null);
 
     const [items, setItems] = useState([])
+    const [dataCart, setDataCart] = useState([]);
 
     const [flyingItem, setFlyingItem] = useState(null);
     const [cartCount, setCartCount] = useState(0);
@@ -82,10 +83,78 @@ function Home() {
     const [opacity, setOpacity] = useState(0);
     const [isHideInput, setIsHideInput] = useState(false)
 
+    // useEffect(() => {
+    //     getCart().then((result) => {
+    //         console.log(result.data)
+    //         setDataCart(result.data)
+    //     })
+    // }, [])
+
+    const loadCart = async () => {
+        try {
+            const result = await getCart();
+            const cartItems = result?.data || [];
+            setDataCart(cartItems);
+            const total = cartItems.reduce(
+                (sum, item) => sum + (Number(item.quantity) || 1),
+                0
+            );
+            setCartCount(total);
+            return cartItems;
+        } catch (error) {
+            console.error("Gagal mengambil cart:", error);
+        }
+    };
+
+    const handleAddToCart = (item, imageElement) => {
+        const cartEl =
+            (isSticky ? stickyCartRef.current : cartRef.current) ||
+            cartRef.current ||
+            stickyCartRef.current ||
+            document.querySelector(".nav-icon .ant-badge .icon");
+
+        const imgEl =
+            imageElement || (imageRefs.current && imageRefs.current[item.id]);
+
+        // 1. Jalankan request ke API secara paralel
+        const postPromise = postCart({
+            product_id: item.id,
+            quantity: 1,
+        });
+
+        if (imgEl && cartEl && animateToCart) {
+            // 2. Jalankan animasi menuju keranjang
+            animateToCart({
+                imageElement: imgEl,
+                cartElement: cartEl,
+                onComplete: async () => {
+                    // 3. Ketika animasi selesai, badge bertambah
+                    setCartCount((prev) => prev + 1);
+
+                    // 4. Selalu update data terbaru dari API
+                    try {
+                        await postPromise;
+                        await loadCart();
+                    } catch (error) {
+                        console.error("Gagal memperbarui cart:", error);
+                        await loadCart();
+                    }
+                },
+            });
+        } else {
+            // Fallback jika elemen animasi tidak ditemukan
+            postPromise
+                .then(() => loadCart())
+                .catch((error) => console.error("Gagal memperbarui cart:", error));
+        }
+    };
+
     useEffect(() => {
         getProduct().then((result) => {
             setItems(result)
         })
+
+        loadCart()
 
         const handleScroll = () => {
             setIsSticky(window.scrollY > 40);
@@ -100,9 +169,9 @@ function Home() {
     }, []);
 
 
-    useEffect(()=>{
-        console.log(JSON.stringify(items, null, 2))
-    })
+    // useEffect(() => {
+    //     console.log(JSON.stringify(items, null, 2))
+    // })
 
     const [searchValue, setSearchValue] = useState("")
     const handleSearchFocus = (param) => {
@@ -286,8 +355,15 @@ function Home() {
                                     <div className="nav-icon">
                                         <img className="icon message-mobile" src={Message} alt="" onClick={chat} />
                                         <img className="icon message-desktop" src={Message} alt="" onClick={showModal} />
-                                        <div ref={cartRef}>
-                                            <img className="icon" src={Cart} alt="" onClick={cart} />
+                                        <div>
+                                            <Badge
+                                                count={cartCount}
+                                                overflowCount={99}
+                                                className="cart-badge"
+                                                offset={[-2, 2]}
+                                            >
+                                                <img className="icon" src={Cart} ref={cartRef} alt="" onClick={cart} />
+                                            </Badge>
                                         </div>
                                         <img className="icon" src={Profile} alt="" onClick={profile} />
                                     </div>
@@ -305,8 +381,15 @@ function Home() {
                                 <div className="nav-icon">
                                     <img className="icon message-mobile" src={Message} alt="" onClick={chat} />
                                     <img className="icon message-desktop" src={Message} alt="" onClick={showModal} />
-                                    <div >
-                                        <img className="icon" src={Cart} ref={cartRef} alt="" onClick={cart} />
+                                    <div>
+                                        <Badge
+                                            count={cartCount}
+                                            overflowCount={99}
+                                            className="cart-badge"
+                                            offset={[-2, 2]}
+                                        >
+                                            <img className="icon" src={Cart} ref={stickyCartRef} alt="" onClick={cart} />
+                                        </Badge>
                                     </div>
                                     <img className="icon" src={Profile} alt="" onClick={profile} />
                                 </div>
@@ -404,6 +487,7 @@ function Home() {
                                         imageRefs={imageRefs}
                                         animateToCart={animateToCart}
                                         detail={detail}
+                                        onAddToCart={handleAddToCart}
                                     />
                                 ))}
 
@@ -423,6 +507,7 @@ function Home() {
                                         imageRefs={imageRefs}
                                         animateToCart={animateToCart}
                                         detail={detail}
+                                        onAddToCart={handleAddToCart}
                                     />
                                 ))}
                         </div>
@@ -441,6 +526,7 @@ function Home() {
                                         imageRefs={imageRefs}
                                         animateToCart={animateToCart}
                                         detail={detail}
+                                        onAddToCart={handleAddToCart}
                                     />
                                 ))}
                         </div>
@@ -458,6 +544,7 @@ function Home() {
                                         imageRefs={imageRefs}
                                         animateToCart={animateToCart}
                                         detail={detail}
+                                        onAddToCart={handleAddToCart}
                                     />
                                 ))}
                         </div>
