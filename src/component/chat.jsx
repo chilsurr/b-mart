@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Arrow from "../assets/arrow.png"
 import Send from "../assets/send.png"
 import { useState, useRef, useEffect } from "react"
@@ -6,6 +7,7 @@ import "../style/chat.css"
 
 
 function Chat() {
+    const { t } = useTranslation();
     const messages = [
         {
             id: 1,
@@ -149,7 +151,7 @@ function Chat() {
                 <input
                     ref={inputRef}
                     type="text"
-                    placeholder="Tulis Pesan..."
+                    placeholder={t("chat.writeMessage")}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     onKeyDown={(e) => {

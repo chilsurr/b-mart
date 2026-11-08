@@ -1,110 +1,208 @@
-/* HP kecil */
-@media (max-width: 480px) {
+/* =========================
+   Order Component Styles
+========================= */
 
-  /* order */
-  .order-container .container {
-    background: #fff;
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 12px 10px;
+  color: #777;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.tab:hover {
+  color: var(--primary-color);
+}
+
+.tab.active {
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f0f0f0;
+  color: #444;
+  transition: all 0.2s ease;
+}
+
+.tab.active .tab-badge {
+  background: var(--primary-color, #2E7D32);
+  color: #ffffff;
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-box {
+  width: 40px;
+  height: 40px;
+  background: #eee;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status {
+  font-weight: 600;
+}
+
+.invoice {
+  font-size: 13px;
+  color: #444;
+}
+
+.date {
+  font-size: 12px;
+  color: #888;
+}
+
+.order-body {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+  color: #333;
+}
+
+.ant-collapse-item {
+  background: #fff;
+  border-radius: 12px !important;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow:
+    -1px 2px 8px rgba(35, 95, 40, 0.35),
+    0 1px 3px rgba(35, 95, 40, 0.2);
+}
+
+.ant-collapse-header {
+  padding: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-collapse-expand-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* =========================
+   Desktop Embedded Mode (Inside /profile/)
+========================= */
+.order-container.order-embedded {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+}
+
+.order-container.order-embedded .container {
+  padding: 0;
+  background: transparent;
+  max-width: 100%;
+  margin: 0;
+}
+
+/* =========================
+   Standalone Mode (/order/)
+========================= */
+.order-container:not(.order-embedded) {
+  min-height: 100vh;
+  background: #f5f5f5;
+  box-sizing: border-box;
+}
+
+.order-container:not(.order-embedded) .container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 24px;
+  padding-top: 80px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+}
+
+.order-container .profile-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  height: 60px;
+  padding: 0 16px;
+  background-color: #2E7D32;
+  color: white;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.order-container .profile-header .icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+/* Mobile Screens */
+@media (max-width: 480px) {
+  .order-container:not(.order-embedded) .container {
     padding: 16px;
     padding-top: 65px;
     border-radius: 12px;
   }
 
-  .profile-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 10px;
-    height: 60px;
-    padding: 0 16px;
-    background-color: #2E7D32;
-    color: white;
-    z-index: 1000;
-  }
-
-  .tabs {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
   .tab {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    color: #777;
-    font-weight: 500;
-  }
-
-  .tab.active {
-    color: var(--primary-color);
-    font-weight: 600;
-    border-bottom: 2px solid var(--primary-color);
-  }
-
-  .order-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .icon-box {
-    width: 40px;
-    height: 40px;
-    background: #eee;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .status {
-    font-weight: 600;
-  }
-
-  .invoice {
+    padding: 10px 4px;
     font-size: 13px;
-    color: #444;
+    gap: 5px;
   }
 
-  .date {
-    font-size: 12px;
-    color: #888;
-  }
-
-  .order-body {
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-  }
-
-  .item-row {
-    padding: 6px 0;
-    font-size: 13px;
-    color: #333;
-  }
-
-  .ant-collapse-item {
-    background: #fff;
-    border-radius: 12px !important;
-    margin-bottom: 12px;
-    overflow: hidden;
-    box-shadow:
-      -1px 2px 8px rgba(35, 95, 40, 0.35),
-      0 1px 3px rgba(35, 95, 40, 0.2);
-  }
-
-  .ant-collapse-header {
-    padding: 16px !important;
-    display: flex !important;
-    align-items: center !important;
-  }
-
-  .ant-collapse-expand-icon {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  .tab-badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    font-size: 11px;
   }
 }

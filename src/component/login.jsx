@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, Link } from "react-router-dom";
 import axiosInstance from "../utils/axios-instance";
 
 function Login() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -40,6 +42,8 @@ function Login() {
         refresh,
         role,
         application,
+        user_id,
+        username,
       } = response.data;
 
       // Simpan token
@@ -49,6 +53,8 @@ function Login() {
       // Simpan informasi user
       localStorage.setItem("role", role);
       localStorage.setItem("application", application);
+      if (user_id) localStorage.setItem("user_id", user_id);
+      if (username) localStorage.setItem("username", username);
 
       // Redirect berdasarkan role
       if (role === "ADMIN") {
@@ -71,10 +77,10 @@ function Login() {
         } else if (data.detail) {
           setError(data.detail);
         } else {
-          setError("Username atau password salah.");
+          setError(t("auth.invalidCredentials"));
         }
       } else {
-        setError("Tidak dapat terhubung ke server.");
+        setError(t("auth.serverError"));
       }
     } finally {
       setLoading(false);
@@ -85,7 +91,7 @@ function Login() {
     <div className="login-container">
 
       <div className="regist-tittle">
-        <div>Login</div>
+        <div>{t("auth.login")}</div>
       </div>
 
       <div className="login-card">
@@ -105,7 +111,7 @@ function Login() {
             className="input"
             type="text"
             name="username"
-            placeholder="Enter your username"
+            placeholder={t("auth.enterUsername")}
             value={form.username}
             onChange={handleChange}
             required
@@ -115,7 +121,7 @@ function Login() {
             className="input"
             type="password"
             name="password"
-            placeholder="Enter your password"
+            placeholder={t("auth.enterPassword")}
             value={form.password}
             onChange={handleChange}
             required
@@ -126,7 +132,7 @@ function Login() {
             className="login-btn"
             disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? t("auth.loggingIn") : t("auth.login")}
           </button>
 
         </form>

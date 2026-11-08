@@ -1,100 +1,101 @@
-import { Input, Carousel, Card, Button } from "antd"
-import { useNavigate } from "react-router-dom"
-import { useEffect, useState, useRef } from "react";
-import { animateToCart } from "../utils/addcartanimation";
-import dataItems from "../utils/dataproduct";
-import MyCard from "../utils/mycard";
-import "../style/home.css"
+import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { Input, Carousel, Card, Button, Modal, Badge } from "antd";
 
+import MyCard from "../utils/mycard";
+import { animateToCart } from "../utils/addcartanimation";
 import { getProduct, getCart, postCart } from "../utils/api";
 
+import Send from "../assets/send.png";
+import Message from "../assets/messenger.png";
+import Cart from "../assets/cart.png";
+import Profile from "../assets/user.png";
 
-import {
-    Modal,
-    List,
-    Avatar,
-    Badge,
-    Dropdown,
-    Empty
-} from "antd";
+import img1 from "../assets/img/baner1.png";
+import img2 from "../assets/img/baner2.png";
+import img3 from "../assets/img/baner3.png";
 
+import imgCat1 from "../assets/img/category1.png";
+import imgCat2 from "../assets/img/category2.png";
+import imgCat3 from "../assets/img/category3.png";
+import imgCat4 from "../assets/img/category4.png";
 
-import Send from "../assets/send.png"
-// import { useState, useRef, useEffect } from "react"
-// import "../style/chat.css"
+import "../style/home.css";
 
+const CATEGORY_IMAGES = {
+    "Makanan": imgCat1,
+    "Minuman": imgCat2,
+    "Kebutuhan rumah": imgCat3,
+    "Kecantikan": imgCat4,
+};
 
+const BANNERS = [img1, img2, img3, img1];
 
-
-import Message from "../assets/messenger.png"
-import Cart from "../assets/cart.png"
-import Search from "../assets/search.png"
-import Profile from "../assets/user.png"
-
-import img1 from "../assets/img/baner1.png"
-import img2 from "../assets/img/baner2.png"
-import img3 from "../assets/img/baner3.png"
-
-import imgCat1 from "../assets/img/category1.png"
-import imgCat2 from "../assets/img/category2.png"
-import imgCat3 from "../assets/img/category3.png"
-import imgCat4 from "../assets/img/category4.png"
-
-// import { motion, AnimatePresence } from "framer-motion";
-import gsap from "gsap";
-import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-
-gsap.registerPlugin(MotionPathPlugin);
-
+const INITIAL_MESSAGES = [
+    {
+        id: 1,
+        side: "left",
+        text: "Halo, ada yang bisa kami bantu seputar produk atau pesanan Anda?",
+    },
+    {
+        id: 2,
+        side: "right",
+        text: "Halo! Saya ingin menanyakan ketersediaan produk sembako dan promo hari ini.",
+    },
+    {
+        id: 3,
+        side: "left",
+        text: "Semua produk yang tampil di etalase ready stock dan siap diantar atau diambil di gerai.",
+    },
+    {
+        id: 4,
+        side: "right",
+        text: "Baik, terima kasih informasinya!",
+    },
+];
 
 function Home() {
-
+    const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const imageRefs = useRef({});
     const cartRef = useRef(null);
-    const stickyCartRef = useRef(null);
+    const inputRef = useRef(null);
+    const chatBodyRef = useRef(null);
 
-    const [items, setItems] = useState([])
-    const [dataCart, setDataCart] = useState([]);
-
-    const [flyingItem, setFlyingItem] = useState(null);
+    const [items, setItems] = useState([]);
     const [cartCount, setCartCount] = useState(0);
-
-
-    const navigate = useNavigate()
-    const { Meta } = Card;
-
-    function cart() {
-        navigate("cart/")
-    }
-    function profile() {
-        navigate("profile/")
-    }
-    function chat() {
-        navigate("chat/")
-    }
-    function detail(id) {
-        console.log(id)
-        navigate(`detail/${id}`)
-    }
-
 
     const [isSticky, setIsSticky] = useState(false);
     const [opacity, setOpacity] = useState(0);
-    const [isHideInput, setIsHideInput] = useState(false)
+    const [isHideInput, setIsHideInput] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
 
-    // useEffect(() => {
-    //     getCart().then((result) => {
-    //         console.log(result.data)
-    //         setDataCart(result.data)
-    //     })
-    // }, [])
+    // Chat modal state
+    const [open, setOpen] = useState(false);
+    const [text, setText] = useState("");
+    const [messages, setMessages] = useState(INITIAL_MESSAGES);
+
+    const getCategoryLabel = (cat) => {
+        switch (cat) {
+            case "Makanan": return t("home.food");
+            case "Minuman": return t("home.beverage");
+            case "Kebutuhan rumah": return t("home.household");
+            case "Kecantikan": return t("home.beauty");
+            default: return cat;
+        }
+    };
+
+    const cart = () => navigate("cart/");
+    const profile = () => navigate("profile/");
+    const chat = () => navigate("chat/");
+    const detail = (id) => navigate(`detail/${id}`);
 
     const loadCart = async () => {
         try {
             const result = await getCart();
             const cartItems = result?.data || [];
-            setDataCart(cartItems);
             const total = cartItems.reduce(
                 (sum, item) => sum + (Number(item.quantity) || 1),
                 0
@@ -108,30 +109,23 @@ function Home() {
 
     const handleAddToCart = (item, imageElement) => {
         const cartEl =
-            (isSticky ? stickyCartRef.current : cartRef.current) ||
             cartRef.current ||
-            stickyCartRef.current ||
             document.querySelector(".nav-icon .ant-badge .icon");
 
         const imgEl =
             imageElement || (imageRefs.current && imageRefs.current[item.id]);
 
-        // 1. Jalankan request ke API secara paralel
         const postPromise = postCart({
             product_id: item.id,
             quantity: 1,
         });
 
         if (imgEl && cartEl && animateToCart) {
-            // 2. Jalankan animasi menuju keranjang
             animateToCart({
                 imageElement: imgEl,
                 cartElement: cartEl,
                 onComplete: async () => {
-                    // 3. Ketika animasi selesai, badge bertambah
                     setCartCount((prev) => prev + 1);
-
-                    // 4. Selalu update data terbaru dari API
                     try {
                         await postPromise;
                         await loadCart();
@@ -142,7 +136,6 @@ function Home() {
                 },
             });
         } else {
-            // Fallback jika elemen animasi tidak ditemukan
             postPromise
                 .then(() => loadCart())
                 .catch((error) => console.error("Gagal memperbarui cart:", error));
@@ -150,17 +143,16 @@ function Home() {
     };
 
     useEffect(() => {
-        getProduct().then((result) => {
-            setItems(result)
-        })
+        getProduct()
+            .then((result) => setItems(result || []))
+            .catch((error) => console.error("Gagal mengambil produk:", error));
 
-        loadCart()
+        loadCart();
 
         const handleScroll = () => {
             setIsSticky(window.scrollY > 40);
-            setIsHideInput(window.scrollY > 1)
-            const newOpacity = Math.min(scrollY / 40, 1);
-            // console.log(newOpacity)
+            setIsHideInput(window.scrollY > 1);
+            const newOpacity = Math.min(window.scrollY / 40, 1);
             setOpacity(newOpacity);
         };
 
@@ -168,291 +160,146 @@ function Home() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-
-    // useEffect(() => {
-    //     console.log(JSON.stringify(items, null, 2))
-    // })
-
-    const [searchValue, setSearchValue] = useState("")
     const handleSearchFocus = (param) => {
-        console.log(param)
-        navigate("/search/", { state: { param } })
-    }
+        navigate("/search/", { state: { param } });
+    };
 
-    const resultCategory = (category) => {
-        console.log(category)
-        navigate("/result-search", { state: { category } })
-    }
-
-    const handleCategory = (param) => {
-        console.log(param)
-        navigate("/search/", { state: { param } })
-    }
+    const handleCategory = (parCategory) => {
+        navigate("/search/", { state: { parCategory } });
+    };
 
     const categories = Object.values(
         items.reduce((acc, item) => {
             if (!acc[item.category]) {
-                acc[item.category] = item
+                acc[item.category] = item;
             }
-            return acc
+            return acc;
         }, {})
-    )
+    );
 
+    const groupedItems = items.reduce((groups, item) => {
+        if (!groups[item.category]) {
+            groups[item.category] = [];
+        }
+        groups[item.category].push(item);
+        return groups;
+    }, {});
 
-    const [open, setOpen] = useState(false);
-    const showModal = () => {
-        setOpen(true)
-        // if (open && chatBodyRef.current) {
-        //     chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-        // }
-        // const chat = chatBodyRef.current;
+    const showModal = () => setOpen(true);
 
-        // if (chat) {
-        //     chat.scrollTop = chat.scrollHeight;
-        // }
-    }
-
-
-    const messages = [
-        {
-            id: 1,
-            side: "left",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 2,
-            side: "right",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 3,
-            side: "left",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 4,
-            side: "right",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 5,
-            side: "left",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 6,
-            side: "right",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 7,
-            side: "right",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 8,
-            side: "left",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 9,
-            side: "right",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 10,
-            side: "right",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 11,
-            side: "right",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 12,
-            side: "left",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 13,
-            side: "right",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-        {
-            id: 14,
-            side: "left",
-            text: "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
-        },
-    ];
-
-    const inputRef = useRef(null);
-    const [text, setText] = useState("")
-
-    const [dataRender, setDataRender] = useState(messages)
-
-    function handleSend() {
-        const message = text.trim();
-
-        if (!message) {
+    const handleSend = () => {
+        const messageText = text.trim();
+        if (!messageText) {
             inputRef.current?.focus();
             return;
         }
 
-        const dumy = {
-            id: dataRender.length + 1,
+        const newMsg = {
+            id: messages.length + 1,
             side: "right",
-            text: message
-        }
+            text: messageText,
+        };
 
-        setDataRender([...dataRender, dumy])
-        setText("")
+        setMessages((prev) => [...prev, newMsg]);
+        setText("");
         inputRef.current?.focus();
-    }
-
-
-
-    const chatBodyRef = useRef(null)
-    // useEffect(() => {
-    //     if (open && chatBodyRef.current) {
-    //         chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-    //     }
-    // }, [open, messages]);
-    // useEffect(() => {
-    //     const chat = chatBodyRef.current;
-
-    //     if (chat) {
-    //         chat.scrollTop = chat.scrollHeight;
-    //     }
-    // }, [dataRender])
+    };
 
     useEffect(() => {
-        const chat = chatBodyRef.current;
-
-        if (chat) {
-            chat.scrollTo({
-                top: chat.scrollHeight,
+        if (chatBodyRef.current) {
+            chatBodyRef.current.scrollTo({
+                top: chatBodyRef.current.scrollHeight,
                 behavior: "smooth",
             });
         }
-    }, [dataRender]);
-
-
-
+    }, [messages]);
 
     return (
         <>
             <div className="container">
-                <div className="">
-                    <div className={`navbar ${isSticky ? "sticky" : ""}`}
+                <div>
+                    {/* Fixed Navbar (Normal & Sticky) */}
+                    <div
+                        className={`navbar ${isSticky ? "sticky" : ""}`}
                         style={{
                             backgroundColor: `rgba(46, 125, 50, ${opacity})`,
                             height: 50,
-                        }}>
-                        {!isSticky ? (
-                            <>
-                                <div className="navbar">
-                                    <div className="nav-icon">
-                                        <img className="icon message-mobile" src={Message} alt="" onClick={chat} />
-                                        <img className="icon message-desktop" src={Message} alt="" onClick={showModal} />
-                                        <div>
-                                            <Badge
-                                                count={cartCount}
-                                                overflowCount={99}
-                                                className="cart-badge"
-                                                offset={[-2, 2]}
-                                            >
-                                                <img className="icon" src={Cart} ref={cartRef} alt="" onClick={cart} />
-                                            </Badge>
-                                        </div>
-                                        <img className="icon" src={Profile} alt="" onClick={profile} />
-                                    </div>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <Input
-                                    type="text"
-                                    placeholder="Search item"
-                                    className={`search-navbar ${isSticky ? "show" : ""}`}
-                                // onFocus={handleSearchFocus}
-                                />
-
-                                <div className="nav-icon">
-                                    <img className="icon message-mobile" src={Message} alt="" onClick={chat} />
-                                    <img className="icon message-desktop" src={Message} alt="" onClick={showModal} />
-                                    <div>
-                                        <Badge
-                                            count={cartCount}
-                                            overflowCount={99}
-                                            className="cart-badge"
-                                            offset={[-2, 2]}
-                                        >
-                                            <img className="icon" src={Cart} ref={stickyCartRef} alt="" onClick={cart} />
-                                        </Badge>
-                                    </div>
-                                    <img className="icon" src={Profile} alt="" onClick={profile} />
-                                </div>
-
-                            </>
+                        }}
+                    >
+                        {isSticky && (
+                            <Input
+                                type="text"
+                                placeholder={t("home.searchPlaceholder")}
+                                className="search-navbar show"
+                                onFocus={() => {
+                                    if (window.innerWidth < 768) {
+                                        navigate("/search/");
+                                    }
+                                }}
+                            />
                         )}
+
+                        <div className="nav-icon">
+                            <img className="icon message-mobile" src={Message} alt="" onClick={chat} />
+                            <img className="icon message-desktop" src={Message} alt="" onClick={showModal} />
+                            <div>
+                                <Badge
+                                    count={cartCount}
+                                    overflowCount={99}
+                                    className="cart-badge"
+                                    offset={[-2, 2]}
+                                >
+                                    <img className="icon" src={Cart} ref={cartRef} alt="" onClick={cart} />
+                                </Badge>
+                            </div>
+                            <img className="icon" src={Profile} alt="" onClick={profile} />
+                        </div>
                     </div>
+
+                    {/* Header Top Brand & Search */}
                     <div className="header-top">
                         <div className="brand">B-mart</div>
 
                         <div className="search-bar">
                             <Input
                                 type="text"
-                                placeholder="Search item"
-                                className={`search-input ${isHideInput ? 'hide-input' : ""}`}
+                                placeholder={t("home.searchPlaceholder")}
+                                className={`search-input ${isHideInput ? "hide-input" : ""}`}
+                                value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
+                                onFocus={() => {
+                                    if (window.innerWidth < 768) {
+                                        navigate("/search/");
+                                    }
+                                }}
                                 onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        console.log("diteken")
-                                        handleSearchFocus(searchValue)
+                                    if (e.key === "Enter" && searchValue.trim()) {
+                                        handleSearchFocus(searchValue.trim());
                                     }
                                 }}
                             />
-                            {/* <img className="icon" src={Search} alt="" /> */}
                         </div>
-
-                        {/* <div className="nav-icon">
-                            <img className="icon" src={Message} alt="" onClick={chat} />
-
-                            <div ref={cartRef}>
-                                <img className="icon" src={Cart} alt="" onClick={cart} />
-                            </div>
-
-                            <img className="icon" src={Profile} alt="" onClick={profile} />
-                        </div> */}
                     </div>
-                    {/* <div className="brand">B-mart</div>
-                    <div className="search-bar">
-                        <Input type="text" placeholder="Search item" className="search-input" onFocus={handleSearchFocus} />
-                        <img className="icon" src={Search} alt="" />
-                    </div> */}
 
-                    <div className="carousel" >
+                    {/* Carousel Banner */}
+                    <div className="carousel">
                         <Carousel autoplay>
-                            <div >
-                                <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>
-                            </div>
-                            <div>
-                                <div className="img-carousel" style={{ backgroundImage: `url(${img2})` }}></div>
-                            </div>
-                            <div>
-                                <div className="img-carousel" style={{ backgroundImage: `url(${img3})` }}></div>
-                            </div>
-                            <div>
-                                <div className="img-carousel" style={{ backgroundImage: `url(${img1})` }}></div>
-                            </div>
+                            {BANNERS.map((img, idx) => (
+                                <div key={idx}>
+                                    <div
+                                        className="img-carousel"
+                                        style={{ backgroundImage: `url(${img})` }}
+                                    />
+                                </div>
+                            ))}
                         </Carousel>
-
                     </div>
                 </div>
+
+                {/* Categories & Product Groups */}
                 <section className="section-body">
                     <div className="category">
-                        <h3>Kategory</h3>
+                        <h3>{t("home.category")}</h3>
                         <div className="card-category">
                             {categories.map((item) => (
                                 <Card
@@ -464,22 +311,23 @@ function Home() {
                                         <img
                                             style={{ height: 85 }}
                                             draggable={false}
-                                            alt="example"
-                                            src={imgCat1}
+                                            alt={item.category}
+                                            src={CATEGORY_IMAGES[item.category] || imgCat1}
                                         />
                                     }
                                 >
-                                    <span>{item.category}</span>
+                                    <span>{getCategoryLabel(item.category)}</span>
                                 </Card>
                             ))}
                         </div>
                     </div>
-                    <div className="makanan grouping">
-                        <h3>Makanan</h3>
-                        <div className="card">
-                            {items
-                                .filter((item) => item.category === "Makanan")
-                                .map((item) => (
+
+                    {Object.entries(groupedItems).map(([category, categoryItems]) => (
+                        <div className="grouping" key={category}>
+                            <h3>{category}</h3>
+
+                            <div className="card">
+                                {categoryItems.map((item) => (
                                     <MyCard
                                         key={item.id}
                                         item={item}
@@ -490,78 +338,20 @@ function Home() {
                                         onAddToCart={handleAddToCart}
                                     />
                                 ))}
-
+                            </div>
                         </div>
-                    </div>
+                    ))}
+                </section>
+            </div>
 
-                    <div className="minuman grouping">
-                        <h3>Minuman</h3>
-                        <div className="card">
-                            {items
-                                .filter((item) => item.category === "Minuman")
-                                .map((item) => (
-                                    <MyCard
-                                        key={item.id}
-                                        item={item}
-                                        cartRef={cartRef}
-                                        imageRefs={imageRefs}
-                                        animateToCart={animateToCart}
-                                        detail={detail}
-                                        onAddToCart={handleAddToCart}
-                                    />
-                                ))}
-                        </div>
-                    </div>
-
-                    <div className="kebutuhan-rumah grouping">
-                        <h3>Kebutuhan Rumah</h3>
-                        <div className="card">
-                            {items
-                                .filter((item) => item.category === "Kebutuhan rumah")
-                                .map((item) => (
-                                    <MyCard
-                                        key={item.id}
-                                        item={item}
-                                        cartRef={cartRef}
-                                        imageRefs={imageRefs}
-                                        animateToCart={animateToCart}
-                                        detail={detail}
-                                        onAddToCart={handleAddToCart}
-                                    />
-                                ))}
-                        </div>
-                    </div>
-                    <div className="kecantikan grouping">
-                        <h3>Kecantikan</h3>
-                        <div className="card">
-                            {items
-                                .filter((item) => item.category === "Kecantikan")
-                                .map((item) => (
-                                    <MyCard
-                                        key={item.id}
-                                        item={item}
-                                        cartRef={cartRef}
-                                        imageRefs={imageRefs}
-                                        animateToCart={animateToCart}
-                                        detail={detail}
-                                        onAddToCart={handleAddToCart}
-                                    />
-                                ))}
-                        </div>
-                    </div>
-                </section >
-            </div >
-
-
+            {/* Desktop Chat Modal */}
             <Modal
                 open={open}
                 afterOpenChange={(visible) => {
                     if (visible && chatBodyRef.current) {
-                        chatBodyRef.current.scrollTop =
-                            chatBodyRef.current.scrollHeight;
+                        chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
                     }
                 }}
-                // setOpen={setOpen}
                 footer={null}
                 closable={false}
                 width={540}
@@ -574,23 +364,18 @@ function Home() {
                 }}
             >
                 <div className="chat-wrapper">
-
-                    {/* Header */}
                     <div className="chat-header-home">
                         <div className="chat-title">
-                            Chat <span>(2)</span>
+                            {t("home.chatTitle")} <span>(2)</span>
                         </div>
-
                         <div className="chat-actions">
                             <Button type="text" onClick={() => setOpen(false)}>X</Button>
                         </div>
                     </div>
 
-                    {/* Body */}
                     <div className="chat-body-home">
-
                         <main className="chat-body" ref={chatBodyRef}>
-                            {(dataRender.length > 0 ? dataRender : messages).map((msg) => (
+                            {messages.map((msg) => (
                                 <div
                                     key={msg.id}
                                     className={`chat-bubble ${msg.side === "left" ? "left" : "right"}`}
@@ -599,16 +384,15 @@ function Home() {
                                 </div>
                             ))}
                         </main>
-
-
                     </div>
+
                     <footer className="chat-footer">
                         <button className="chat-add">＋</button>
 
                         <input
                             ref={inputRef}
                             type="text"
-                            placeholder="Tulis Pesan..."
+                            placeholder={t("home.chatPlaceholder")}
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             onKeyDown={(e) => {
@@ -623,43 +407,10 @@ function Home() {
                             <img src={Send} alt="" />
                         </button>
                     </footer>
-
                 </div>
             </Modal>
-
-
-            {/* <AnimatePresence>
-                {flyingItem && (
-                    <motion.img
-                        src={flyingItem.image}
-                        alt=""
-                        initial={{
-                            position: "fixed",
-                            left: flyingItem.startX,
-                            top: flyingItem.startY,
-                            width: 80,
-                            zIndex: 9999,
-                        }}
-                        animate={{
-                            left: flyingItem.endX,
-                            top: flyingItem.endY,
-                            scale: 0.2,
-                            opacity: 0.5,
-                        }}
-                        transition={{
-                            duration: 0.8,
-                            ease: "easeInOut",
-                        }}
-                        onAnimationComplete={() => {
-                            setCartCount((v) => v + 1);
-                            setFlyingItem(null);
-                        }}
-                    />
-                )}
-            </AnimatePresence> */}
         </>
-
-
-    )
+    );
 }
-export default Home
+
+export default Home;

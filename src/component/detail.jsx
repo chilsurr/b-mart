@@ -1,17 +1,31 @@
-import { useNavigate, useParams } from "react-router-dom"
-import { useRef, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useRef, useState, useEffect } from "react"
 import "../style/detail.css"
 
 import Message from "../assets/messenger.png"
 import Cart from "../assets/cart.png"
 import Arrow from "../assets/arrow.png"
+import { getProduct } from "../utils/api"
 
 import dataItems from "../utils/dataproduct"
 import { animateToCart } from "../utils/addcartanimation"
 
+import imgCat1 from "../assets/img/category1.png"
+
 export default function ProductDetail() {
+    const { t } = useTranslation();
+
+
+    const [items, setItems] = useState([])
+
     const { id } = useParams()
-    const dataDetail = dataItems.filter((item) => item.id == id)
+    const dataDetail = items.filter((item) => item.id == id)
+    useEffect(() => {
+        getProduct().then((result) => {
+            setItems(result)
+        })
+    },[])
 
     const productImageRef = useRef(null);
 
@@ -47,17 +61,17 @@ export default function ProductDetail() {
                     <div className="detail-body" key={item.id}>
                         <div className="detail-image">
                             <div className="cover-img">
-                                <img className="product-image" src={item.img} alt="" ref={productImageRef} />
+                                <img className="product-image" src={imgCat1} alt="" ref={productImageRef} />
                             </div>
                         </div>
                         <div className="detail-product">
                             <div className="product-info">
-                                <div>{item.nama}</div>
-                                <div>{item.price}</div>
+                                <div>{item.name}</div>
+                                <div>Rp. {item.price}</div>
                             </div>
 
                             <div className="description">
-                                <div><b>Deskripsi</b></div>
+                                <div><b>{t("product.description")}</b></div>
                                 <div>
                                     {item.deskripsi}
                                 </div>
@@ -73,7 +87,7 @@ export default function ProductDetail() {
                                             //     setCartCount((prev) => prev + 1),
                                         }, console.log(productImageRef))
                                     }
-                                >Add Cart</button>
+                                >{t("product.addCart")}</button>
                             </div>
                         </div>
                     </div>

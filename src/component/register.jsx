@@ -1,9 +1,11 @@
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { postRegist } from "../utils/api";
 
 
 function Register() {
+  const { t } = useTranslation();
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
@@ -49,9 +51,7 @@ function Register() {
         return;
       }
 
-      setSuccess(
-        "Registrasi berhasil. Silakan login."
-      );
+      setSuccess(t("auth.regSuccess"));
 
       setForm({
         username: "",
@@ -64,7 +64,7 @@ function Register() {
       console.error(error);
 
       setErrors({
-        general: "Tidak dapat terhubung ke server.",
+        general: t("auth.serverError"),
       });
     }
   }
@@ -73,7 +73,7 @@ function Register() {
     <div className="register-container">
       <div className="register-card">
         <div className="regist-tittle">
-          <div >Register</div>
+          <div>{t("auth.register")}</div>
 
           {success && (
             <p>{success}</p>
@@ -86,7 +86,7 @@ function Register() {
 
         <form className="register-form" onSubmit={handleSubmit}>
           <div>
-            <label>Username</label>
+            <label>{t("auth.username")}</label>
             <input
               className="input"
               type="text"
@@ -116,7 +116,7 @@ function Register() {
           </div>
 
           <div>
-            <label>Password</label>
+            <label>{t("auth.password")}</label>
             <input
               className="input"
               type="password"
@@ -131,7 +131,7 @@ function Register() {
           </div>
 
           <div>
-            <label>Konfirmasi Password</label>
+            <label>{t("auth.confirmPassword")}</label>
             <input
               className="input"
               type="password"
@@ -146,13 +146,11 @@ function Register() {
               </p>
             )}
           </div>
-          <button type="submit" className="register-btn">
-            Register
-          </button>
+          <button type="submit" className="register-btn">{t("auth.register")}</button>
         </form>
 
         <p className="login-text">
-          Already have an account? <Link to="/login/">Login</Link>
+          {t("auth.alreadyHaveAccount")} <Link to="/login/">{t("auth.login")}</Link>
         </p>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { Input, Empty } from "antd";
+import { useTranslation } from "react-i18next";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import "../style/search.css"
 
@@ -14,11 +15,24 @@ import dataItems from "../utils/dataproduct";
 import MyCard from "../utils/mycard";
 import { animateToCart } from "../utils/addcartanimation";
 
+import { getProduct } from "../utils/api";
+
 
 
 
 
 function Search() {
+    const { t } = useTranslation();
+
+    const getCategoryName = (name) => {
+        switch (name) {
+            case "Makanan": return t("home.food");
+            case "Minuman": return t("home.beverage");
+            case "Perawatan Rumah": return t("home.household");
+            case "Kecantikan": return t("home.beauty");
+            default: return name;
+        }
+    };
 
     const searchHistory = [
         "magnum",
@@ -59,19 +73,28 @@ function Search() {
     const [cartCount, setCartCount] = useState(0);
 
     const location = useLocation();
-    const searchCategory = location.state?.param || "";
+    // const searchCategory = location.state?.parCategory || "";
+
+    const [dataProducts, setDataProducts] = useState([])
 
 
-    const { state } = useLocation();
-    console.log(state)
-    useEffect(() => (
-        setSearch(state.param),
-        setCategory(searchCategory),
-        setDataProducts(dataItems)
-    ), [])
+    const searchCategory = location.state?.parCategory ?? "";
+    const searchParam = location.state?.param ?? "";
+    console.log(searchCategory)
+    // console.log(state)
+    useEffect(() => {
+        getProduct().then((result) => {
+            setDataProducts(result);
+        });
+
+        setSearch(searchParam);
+        setCategory(searchCategory);
+    }, []);
 
     // const { state } = useLocation();
     // console.log(state)
+
+    useEffect(() => console.log(dataProducts), [])
 
 
     const navigate = useNavigate()
@@ -87,14 +110,18 @@ function Search() {
         navigate("/cart/")
     }
 
-    const [dataProducts, setDataProducts] = useState([])
     const [dataSearch, setDataSearch] = useState([])
     const [category, setCategory] = useState("")
     const [search, setSearch] = useState("")
-
     const filteredData =
-        search.length >= 3 ? dataProducts.filter((data) => data.nama.toLowerCase().includes(search.toLowerCase()))
-            : category ? dataProducts.filter((data) => data.category.toLowerCase() === category.toLowerCase())
+        search.length >= 3
+            ? dataProducts.filter((data) =>
+                data.name.toLowerCase().includes(search.toLowerCase())
+            )
+            : category
+                ? dataProducts.filter((data) =>
+                    data.category.toLowerCase() === category.toLowerCase()
+                )
                 : [];
 
     const searchComponent = () => search.length >= 3 || category.length > 0 ? "body" : search.length < 1 ? "main" : "choice"
@@ -116,7 +143,7 @@ function Search() {
         <div className="search-page">
             <div className="search-component">
                 <img className="icon" src={Arrow} alt="" onClick={back} />
-                <Input type="text" placeholder="Search item" className="search-input" value={search} onChange={(e) => handleSearch(e)} />
+                <Input type="text" placeholder={searchCategory ? getCategoryName(searchCategory) : t("search.searchPlaceholder")} className="search-input" value={search} onChange={(e) => handleSearch(e)} />
                 {/* <img className="icon" src={Search} alt="" /> */}
                 <img className="icon" src={Cart} ref={cartRef} alt="" onClick={cart} />
             </div>
@@ -125,10 +152,8 @@ function Search() {
                 <div className="search-main">
                     <section className="history-section">
                         <div className="section-header">
-                            <h2>Riwayat Pencarian</h2>
-                            <button className="clear-btn">
-                                Hapus Riwayat
-                            </button>
+                            <h2>{t("search.searchHistory")}</h2>
+                            <button className="clear-btn">{t("search.clearHistory")}</button>
                         </div>
 
                         <div className="history-tags">
@@ -144,7 +169,7 @@ function Search() {
                     </section>
 
                     <section className="category-section">
-                        <h2>Kategori Pilihan</h2>
+                        <h2>{t("search.featuredCategories")}</h2>
 
                         <div className="category-list">
                             {categories.map((category) => (
@@ -160,7 +185,7 @@ function Search() {
                                         />
                                     </div>
 
-                                    <span>{category.name}</span>
+                                    <span>{getCategoryName(category.name)}</span>
                                 </div>
                             ))}
                         </div>
@@ -171,8 +196,8 @@ function Search() {
             {searchComponent() === "choice" &&
                 <div className="search-choice">
                     <div className="search-not-valid">
-                        <h3>Ketik Minimal 3 Karakter</h3>
-                        <p>Untuk bisa mendapatkan hasil pencarian</p>
+                        <h3>{t("search.minCharsNotice")}</h3>
+                        <p>{t("search.minCharsDesc")}</p>
                     </div>
                 </div>
             }
@@ -183,7 +208,7 @@ function Search() {
                         <div className="empty-wrapper">
                             <Empty
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                description="Item Not Found"
+                                description={t("search.notFound")}
                             />
                         </div>
                     ) : (

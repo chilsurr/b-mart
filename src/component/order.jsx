@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom"
 import { Collapse } from "antd";
+import dayjs from "dayjs";
 import "../style/order.css"
 
 import invoice from "../assets/invoice.png"
@@ -8,233 +10,33 @@ import Arrow from "../assets/arrow.png"
 import down from "../assets/down.png"
 import up from "../assets/up.png"
 
-import dataOrders from "../utils/dataorder"
-import dataItems from "../utils/dataproduct"
+import { getOrders, getCurrentUser } from "../utils/api";
 
+function OrderList({ status: propStatus, isEmbedded = false }) {
+    const { t } = useTranslation();
 
-
-function OrderList() {
-
-    const data = [
-        // ON PROCESS (4)
-        {
-            id: 1,
-            invoice: "INV-1001",
-            status: "On Process",
-            date: "2026-04-25",
-            items: [
-                {
-                    product: {
-                        id: 1,
-                        name: "Nasi Goreng Spesial",
-                        price: 25000,
-                        image: "/images/nasgor.jpg",
-                    },
-                    qty: 1,
-                },
-            ],
-        },
-        {
-            id: 2,
-            invoice: "INV-1002",
-            status: "On Process",
-            date: "2026-04-25",
-            items: [
-                {
-                    product: {
-                        id: 2,
-                        name: "Mie Ayam",
-                        price: 20000,
-                        image: "/images/mieayam.jpg",
-                    },
-                    qty: 2,
-                },
-            ],
-        },
-        {
-            id: 3,
-            invoice: "INV-1003",
-            status: "On Process",
-            date: "2026-04-24",
-            items: [
-                {
-                    product: {
-                        id: 3,
-                        name: "Sate Ayam",
-                        price: 30000,
-                        image: "/images/sate.jpg",
-                    },
-                    qty: 1,
-                },
-            ],
-        },
-        {
-            id: 4,
-            invoice: "INV-1004",
-            status: "On Process",
-            date: "2026-04-24",
-            items: [
-                {
-                    product: {
-                        id: 4,
-                        name: "Bakso Urat",
-                        price: 22000,
-                        image: "/images/bakso.jpg",
-                    },
-                    qty: 3,
-                },
-            ],
-        },
-
-        // NEED PICK-UP (3)
-        {
-            id: 5,
-            invoice: "INV-1005",
-            status: "Need Pick-up",
-            date: "2026-04-23",
-            items: [
-                {
-                    product: {
-                        id: 5,
-                        name: "Ayam Geprek",
-                        price: 27000,
-                        image: "/images/geprek.jpg",
-                    },
-                    qty: 1,
-                },
-            ],
-        },
-        {
-            id: 6,
-            invoice: "INV-1006",
-            status: "Need Pick-up",
-            date: "2026-04-23",
-            items: [
-                {
-                    product: {
-                        id: 6,
-                        name: "Es Teh",
-                        price: 5000,
-                        image: "/images/esteh.jpg",
-                    },
-                    qty: 2,
-                },
-            ],
-        },
-        {
-            id: 7,
-            invoice: "INV-1007",
-            status: "Need Pick-up",
-            date: "2026-04-22",
-            items: [
-                {
-                    product: {
-                        id: 7,
-                        name: "Nasi Padang",
-                        price: 35000,
-                        image: "/images/padang.jpg",
-                    },
-                    qty: 1,
-                },
-            ],
-        },
-
-        // DONE (5)
-        {
-            id: 8,
-            invoice: "INV-1008",
-            status: "Done",
-            date: "2026-04-22",
-            items: [
-                {
-                    product: {
-                        id: 8,
-                        name: "Jus Alpukat",
-                        price: 12000,
-                        image: "/images/alpukat.jpg",
-                    },
-                    qty: 2,
-                },
-            ],
-        },
-        {
-            id: 9,
-            invoice: "INV-1009",
-            status: "Done",
-            date: "2026-04-21",
-            items: [
-                {
-                    product: {
-                        id: 9,
-                        name: "Kopi Susu",
-                        price: 18000,
-                        image: "/images/kopisusu.jpg",
-                    },
-                    qty: 1,
-                },
-            ],
-        },
-        {
-            id: 10,
-            invoice: "INV-1010",
-            status: "Done",
-            date: "2026-04-21",
-            items: [
-                {
-                    product: {
-                        id: 10,
-                        name: "Burger Beef",
-                        price: 40000,
-                        image: "/images/burger.jpg",
-                    },
-                    qty: 1,
-                },
-            ],
-        },
-        {
-            id: 11,
-            invoice: "INV-1011",
-            status: "Done",
-            date: "2026-04-20",
-            items: [
-                {
-                    product: {
-                        id: 11,
-                        name: "Pizza Mini",
-                        price: 45000,
-                        image: "/images/pizza.jpg",
-                    },
-                    qty: 1,
-                },
-            ],
-        },
-        {
-            id: 12,
-            invoice: "INV-1012",
-            status: "Done",
-            date: "2026-04-20",
-            items: [
-                {
-                    product: {
-                        id: 12,
-                        name: "Cappuccino",
-                        price: 22000,
-                        image: "/images/cappuccino.jpg",
-                    },
-                    qty: 2,
-                },
-            ],
-        },
-    ];
-
+    const getStatusLabel = (s) => {
+        switch (s) {
+            case "On Process": return t("order.onProcess");
+            case "Need Pick-up": return t("order.needPickup");
+            case "Done": return t("order.done");
+            default: return s;
+        }
+    };
 
     const [openId, setOpenId] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [allOrders, setAllOrders] = useState([]);
+    const [dataFilter, setDataFilter] = useState([]);
 
-    const location = useLocation()
-    const status = location.state?.status ?? "On Process";
-    useEffect(() => (
-        filter_order(status)
-    ), [status])
+    const location = useLocation();
+    const status = propStatus ?? location.state?.status ?? "On Process";
+    const [tabActive, setTabActive] = useState(status);
+
+    useEffect(() => {
+        setTabActive(status);
+        filter_order(status, allOrders);
+    }, [status]);
 
     const navigate = useNavigate()
     function back() {
@@ -245,25 +47,110 @@ function OrderList() {
         setOpenId(openId === id ? null : id);
     };
 
+    // Ambil pesanan online dari API yang sesuai dengan ID user yang sedang login
+    const fetchUserOrders = async () => {
+        setLoading(true);
+        try {
+            const user = await getCurrentUser();
+            const userId = user?.id || localStorage.getItem("user_id");
 
-    const dataOrderFix = dataOrders.map((item) => ({
-        ...item, items: item.items.map((item) => ({
-            ...dataItems.find((data) => data.id === item.id),
-            quantity: item.quantity
-        }))
-    }))
-    console.log(dataOrderFix)
+            if (!userId) {
+                setAllOrders([]);
+                setDataFilter([]);
+                return;
+            }
 
-    const [dataFilter, setDataFilter] = useState([])
+            const response = await getOrders({
+                order_type: "online",
+                customer: userId,
+                customer_id: userId
+            });
+            const data = response?.data || [];
 
-    function filter_order(param) {
-        console.log(param)
-        const data_order = dataOrderFix.filter((item) => {
-            return item.status === param
-        })
-        setDataFilter(data_order)
-        console.log(data_order)
+            const formatted = data.map((order) => {
+                const dateObj = dayjs(order.created_at);
+                const tanggal = dateObj.isValid() ? dateObj.format("YYYY-MM-DD") : (order.created_at || "-");
+                const jam = dateObj.isValid() ? dateObj.format("HH:mm:ss") : "00:00:00";
+
+                const mappedItems = Array.isArray(order.items) && order.items.length > 0
+                    ? order.items.map((it) => ({
+                        id: it.id || it.product?.id,
+                        nama: it.product?.name || `Produk #${it.id}`,
+                        price: it.product?.price || (it.price && it.quantity ? it.price / it.quantity : it.price) || 0,
+                        category: it.product?.category || "Umum",
+                        img: it.product?.image || null,
+                        quantity: it.quantity || 1,
+                    }))
+                    : [];
+
+                const total = order.total || mappedItems.reduce((acc, it) => acc + it.price * it.quantity, 0);
+
+                return {
+                    id: order.id,
+                    invoice: order.invoice,
+                    status: order.status || "On Process",
+                    tanggal: tanggal,
+                    jam: jam,
+                    total: total,
+                    items: mappedItems,
+                };
+            });
+
+            setAllOrders(formatted);
+            localStorage.setItem("online_orders", JSON.stringify(formatted));
+            filter_order(tabActive, formatted);
+        } catch (error) {
+            console.error("Gagal mengambil data order dari API:", error);
+            const saved = localStorage.getItem("online_orders");
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    setAllOrders(parsed);
+                    filter_order(tabActive, parsed);
+                } catch (e) {
+                    console.error("Gagal parse cache orders:", e);
+                }
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchUserOrders();
+
+        const handleStorage = (e) => {
+            if (e.key === "online_orders" && e.newValue) {
+                try {
+                    const parsed = JSON.parse(e.newValue);
+                    setAllOrders(parsed);
+                    filter_order(tabActive, parsed);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        };
+
+        const handleCustomUpdate = () => {
+            fetchUserOrders();
+        };
+
+        window.addEventListener("storage", handleStorage);
+        window.addEventListener("online_orders_updated", handleCustomUpdate);
+        return () => {
+            window.removeEventListener("storage", handleStorage);
+            window.removeEventListener("online_orders_updated", handleCustomUpdate);
+        };
+    }, []);
+
+    function filter_order(param, sourceOrders = allOrders) {
+        const data_order = sourceOrders.filter((item) => item.status === param);
+        setDataFilter(data_order);
     }
+
+    useEffect(() => {
+        filter_order(tabActive, allOrders);
+    }, [allOrders, tabActive]);
 
     const items = dataFilter.map((order) => ({
         key: order.id,
@@ -272,8 +159,8 @@ function OrderList() {
             <div className="order-header">
                 <div className="icon-box">📄</div>
                 <div className="order-info">
-                    <div className="status">{order.status}</div>
-                    <div className="invoice">No Bon {order.invoice}</div>
+                    <div className="status">{getStatusLabel(order.status)}</div>
+                    <div className="invoice">{t("order.invoiceNo")} {order.invoice}</div>
                     <div className="date">{order.tanggal} {order.jam}</div>
                 </div>
 
@@ -292,24 +179,27 @@ function OrderList() {
         ),
     }));
 
-    const [tabActive, setTabActive] = useState(status)
+    // Hitung jumlah pesanan per status
+    const countOnProcess = allOrders.filter((o) => o.status === "On Process").length;
+    const countNeedPickup = allOrders.filter((o) => o.status === "Need Pick-up").length;
+    const countDone = allOrders.filter((o) => o.status === "Done").length;
 
     const tabs = [
-        { value: "On Process" },
-        { value: "Need Pick-up" },
-        { value: "Done" },
+        { value: "On Process", label: t("order.onProcess"), count: countOnProcess },
+        { value: "Need Pick-up", label: t("order.needPickup"), count: countNeedPickup },
+        { value: "Done", label: t("order.done"), count: countDone },
     ];
 
-
-
     return (
-        <div className="order-container">
+        <div className={`order-container ${isEmbedded ? "order-embedded" : ""}`}>
 
             <div className="container">
-                <div className="profile-header">
-                    <img className="icon" src={Arrow} alt="" onClick={back} />
-                    <h3>My Order</h3>
-                </div>
+                {!isEmbedded && (
+                    <div className="profile-header">
+                        <img className="icon" src={Arrow} alt="" onClick={back} />
+                        <h3>{t("order.title")}</h3>
+                    </div>
+                )}
 
                 {/* TAB (UI only) */}
                 <div className="tabs">
@@ -322,7 +212,8 @@ function OrderList() {
                                 setTabActive(tab.value);
                             }}
                         >
-                            {tab.value}
+                            <span>{tab.label}</span>
+                            <span className="tab-badge">{tab.count}</span>
                         </div>
                     ))}
                 </div>

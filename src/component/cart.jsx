@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useState } from "react"
 import Arrow from "../assets/arrow.png"
 import "../style/cart.css"
 
-import { getCart, updateCart,deleteCart } from "../utils/api"
+import { getCart, updateCart, deleteCart } from "../utils/api"
 
 import dataItems from "../utils/dataproduct"
 import dataCart from "../utils/datacart"
@@ -21,6 +22,7 @@ const CheckboxGroup = Checkbox.Group;
 
 
 function Cart() {
+    const { t } = useTranslation();
 
     useEffect(() => {
         getCart().then((result) => {
@@ -28,7 +30,7 @@ function Cart() {
             setCart(result.data)
         })
 
-    },[])
+    }, [])
 
 
     const [cart, setCart] = useState([]);
@@ -89,10 +91,10 @@ function Cart() {
 
         // quantity = 1 => konfirmasi hapus
         confirm({
-            title: "Hapus Produk",
-            content: "Apakah Anda ingin menghapus item ini dari keranjang?",
-            okText: "Ya, Hapus",
-            cancelText: "Batal",
+            title: t("cart.deleteTitle"),
+            content: t("cart.deleteContent"),
+            okText: t("cart.yesDelete"),
+            cancelText: t("cart.cancel"),
             centered: true,
 
             okButtonProps: {
@@ -119,6 +121,11 @@ function Cart() {
 
 
     const [checkedList, setCheckedList] = useState([]);
+    console.log(checkedList)
+    useEffect(() => {
+        setCheckedList(cart.map(item => item.id));
+    }, [cart]);
+
     const checkAll = cart.length === checkedList.length;
     const indeterminate = checkedList.length > 0 && checkedList.length < cart.length;
     function onChange(id) {
@@ -133,18 +140,32 @@ function Cart() {
     };
 
 
-    const getTotalCart = () => cart.reduce(
-        (total, item) => total + item.product.price * item.quantity, 0
-    )
+    const getTotalCart = () => cart
+        .filter(item => checkedList.includes(item.id)).reduce(
+            (total, item) => total + item.product.price * item.quantity, 0
 
-    const goPayment = () => navigate("/payment/", { state: { cart } })
+        )
+
+    // const getTotalCart = () => cart.reduce(
+    //     (total, item) => total + item.product.price * item.quantity, 0
+    // )
+
+    const goPayment = () => {
+        const checkedCart = cart.filter(item => checkedList.includes(item.id));
+        if (checkedCart.length === 0) {
+            alert("Silakan pilih setidaknya satu produk untuk checkout.");
+            return;
+        }
+        navigate("/payment/", { state: { cart: checkedCart } });
+    };
+    console.log(cart)
 
     return (
         <>
             <div className="cart-container">
                 <div className="head-bar">
                     <img className="icon" src={Arrow} alt="" onClick={back} />
-                    <div>keranjang pak</div>
+                    <div>{t("cart.title")}</div>
                 </div>
                 <div className="content-cart">
                     {cart.map((item) => (
@@ -173,12 +194,10 @@ function Cart() {
                 </div>
                 <div className="footer-bar">
                     <div className="checkout-section">
-                        <Checkbox className="check-all" indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
-                            Check all
-                        </Checkbox>
+                        <Checkbox className="check-all" indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>{t("cart.checkAll")}</Checkbox>
                         <div className="total-price">Rp. {getTotalCart().toLocaleString("id-ID")}</div>
                     </div>
-                    <Button className="btn-payment" onClick={goPayment}>Payment</Button>
+                    <Button className="btn-payment" onClick={goPayment}>{t("cart.payment")}</Button>
                 </div>
 
             </div>

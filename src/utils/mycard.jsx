@@ -1,4 +1,5 @@
 import { Card } from "antd";
+import { useTranslation } from "react-i18next";
 import { useRef } from "react";
 import imgCat1 from "../assets/img/category1.png";
 import { postCart } from "./api";
@@ -11,6 +12,7 @@ const MyCard = ({
     detail,
     onAddToCart
 }) => {
+    const { t } = useTranslation();
     const localImgRef = useRef(null);
 
     const handleAddCart = (e) => {
@@ -91,9 +93,7 @@ const MyCard = ({
                         e.stopPropagation();
                         handleAddCart(e);
                     }}
-                >
-                    Add Cart
-                </button>
+                >{t("common.addCart")}</button>
             </div>
         </Card>
     );
